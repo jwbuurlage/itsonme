@@ -4,6 +4,7 @@ project.group = 'com.facebook.android'
 
 dependencies {
     compile files('../libs/bolts.jar')
+    compile 'com.android.support:appcompat-v7:+'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 

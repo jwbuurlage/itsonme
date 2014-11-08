@@ -164,6 +164,8 @@ public class LobbyActivity extends Activity {
         GroupListAdapter adapter = new GroupListAdapter(this, groupList);
         lv.setAdapter(adapter);
 
+        final Intent intent = new Intent(this, EveningActivity.class);
+
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -179,6 +181,21 @@ public class LobbyActivity extends Activity {
 
                 // Show Alert
                 Log.i("LobbyClicked", "Position :" + itemPosition + "  ListItem : " + itemValue.name);
+
+                ServerInterface service = Root.getInstance().getService();
+                service.joinGroup(itemValue.id, new retrofit.Callback<Group>() {
+                    @Override
+                    public void success(Group group, Response response) {
+                        Log.i(TAG, "Group joined. Server gave group.");
+                        Root.getInstance().currentGroup = group;
+                        startActivity(intent);
+                    }
+                    @Override
+                    public void failure(RetrofitError retrofitError) {
+                        Log.e(TAG, "RetrofitError: " + retrofitError.getKind());
+                        Log.e(TAG, "RetrofitError details: " + retrofitError.getUrl() + ", repsonse = " + retrofitError.getResponse());
+                    }
+                });
 
             }
 
