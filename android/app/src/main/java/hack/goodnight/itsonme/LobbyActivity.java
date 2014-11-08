@@ -1,9 +1,11 @@
 package hack.goodnight.itsonme;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -49,9 +51,11 @@ public class LobbyActivity extends Activity {
         groups.bringToFront();
         for(int i = 0; i < data.length; i++){
             TableRow tr =  new TableRow(this);
+            tr.setPadding(20, 20, 20, 20);
 
             TextView c1 = new TextView(this);
             c1.setText(data[i].name);
+            c1.setTextSize(20);
 
             TextView c2 = new TextView(this);
             c2.setText(String.valueOf(data[i].x));
@@ -95,5 +99,12 @@ public class LobbyActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void createGroup(View v)
+    {
+        Intent intent;
+        intent = new Intent(this, CreateGroupActivity.class);
+        startActivity(intent);
     }
 }

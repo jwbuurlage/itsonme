@@ -19,6 +19,8 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
         android:visibility="visible"
-        android:background="@drawable/com_facebook_button_check" />
+        android:background="@drawable/com_facebook_close"
+        android:clickable="true"
+        android:onClick="createGroup" />
 
 </RelativeLayout>

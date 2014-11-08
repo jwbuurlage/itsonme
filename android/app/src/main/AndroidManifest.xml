@@ -35,6 +35,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hack.goodnight.itsonme.Login" />
         </activity>
+        <activity
+            android:name="hack.goodnight.itsonme.CreateGroupActivity"
+            android:label="@string/title_activity_create_group" >
+        </activity>
     </application>
 
 </manifest>
