@@ -69,20 +69,20 @@ public class Login extends Activity {
         service.getGroup(new retrofit.Callback<Group>(){
             @Override
             public void success(Group group, Response response) {
-                TextView mylabel = (TextView) findViewById(R.id.textViewMiddle);
-                mylabel.setText("Sweet succes!...");
+//                TextView mylabel = (TextView) findViewById(R.id.textViewMiddle);
+//                mylabel.setText("Sweet succes!...");
                 Log.d("ITSONMETAG","Group info: "+group.name+" and "+group.id);
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                TextView mylabel = (TextView) findViewById(R.id.textViewMiddle);
-                mylabel.setText("ERROR :(");
+//                TextView mylabel = (TextView) findViewById(R.id.textViewMiddle);
+//                mylabel.setText("ERROR :(");
                 Log.d("ITSONMETAG", "for fucks sake. error = "+ retrofitError.getKind());
                 Log.d("ITSONMETAG", "for fucks sake. other stuff = "+ retrofitError.getUrl() + ", repsonse = " + retrofitError.getResponse());
             }
         });
-        TextView mylabel = (TextView) findViewById(R.id.textViewMiddle);
-        mylabel.setText("Loading...");
+//        TextView mylabel = (TextView) findViewById(R.id.textViewMiddle);
+//        mylabel.setText("Loading...");
     }
 }
