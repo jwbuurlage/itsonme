@@ -8,33 +8,52 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-public class
+class TestData extends Object {
+    public int x;
+    public int y;
+    public String name;
+
+    public TestData(int _x, int _y, String _name)
+    {
+        x = _x;
+        y = _y;
+        name = _name;
+    }
+}
 
 public class LobbyActivity extends Activity {
-    private TestData[] Data = {
-            new TestData
-
+    private TestData[] data = {
+            new TestData(1, 2, "Zuipen op maandag."),
+            new TestData(1, 2, "Zuipen op dinsdag."),
+            new TestData(1, 2, "Zuipen op woensdag."),
+            new TestData(1, 2, "Balansdag (zuipen)"),
+            new TestData(1, 2, "Zuipen op vrijdag.")
     };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        TableLayout prices = (TableLayout)findViewById(R.id.table_groups);
-        prices.setStretchAllColumns(true);
-        prices.bringToFront();
-        for(int i = 0; i < drug.length; i++){
+        TableLayout groups = (TableLayout)findViewById(R.id.table_groups);
+        groups.setStretchAllColumns(true);
+        groups.bringToFront();
+        for(int i = 0; i < data.length; i++){
             TableRow tr =  new TableRow(this);
+
             TextView c1 = new TextView(this);
-            c1.setText(drug[i].getName());
+            c1.setText(data[i].name);
+
             TextView c2 = new TextView(this);
-            c2.setText(String.valueOf(drug[i].getPrice()));
+            c2.setText(String.valueOf(data[i].x));
+
             TextView c3 = new TextView(this);
-            c3.setText(String.valueOf(drug[i].getAmount()));
+            c3.setText(String.valueOf(data[i].y));
+
             tr.addView(c1);
             tr.addView(c2);
             tr.addView(c3);
-            prices.addView(tr);
+
+            groups.addView(tr);
         }
 
         setContentView(R.layout.activity_lobby);
