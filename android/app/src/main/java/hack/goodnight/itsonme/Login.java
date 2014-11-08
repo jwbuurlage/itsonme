@@ -8,6 +8,8 @@ import android.view.View;
 
 import com.facebook.AppEventsLogger;
 
+import retrofit.RestAdapter;
+
 public class Login extends Activity {
 
     @Override
@@ -57,5 +59,12 @@ public class Login extends Activity {
 
     public void myEventFunction(View view) {
         //Do stuff
+
+
+        //TODO Do this at a global point
+        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint("http://private-anon-265b71629-itsonme.apiary-mock.com").build();
+
+        ServerInterface service = restAdapter.create(ServerInterface.class);
+
     }
 }
