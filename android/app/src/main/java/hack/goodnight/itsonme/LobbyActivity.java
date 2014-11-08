@@ -2,51 +2,105 @@ package hack.goodnight.itsonme;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
 
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-/* class ProfileImageGridView extends GridView
-{
 
-} */
 
-class TestData extends Object {
-    public int x;
-    public int y;
-    public String name;
+class GroupListAdapter extends ArrayAdapter<Group>{
+    class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
 
-    public TestData(int _x, int _y, String _name)
-    {
-        x = _x;
-        y = _y;
-        name = _name;
+        public ImageDownloader(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String url = urls[0];
+            Bitmap mIcon = null;
+            try {
+                InputStream in = new java.net.URL(url).openStream();
+                mIcon = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+            }
+            return mIcon;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
+    }
+
+    private final Activity context;
+    private final List<Group> web;
+
+    public GroupListAdapter(Activity context,
+                            List<Group> web) {
+        super(context, R.layout.row_group_info, web);
+        this.context = context;
+        this.web = web;
+    }
+
+    private static Drawable LoadImageFromWeb(String url) {
+        try {
+            InputStream is = (InputStream) new URL(url).getContent();
+            Drawable d = Drawable.createFromStream(is, "src name");
+            return d;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public View getView(int position, View view, ViewGroup parent) {
+        LayoutInflater inflater = context.getLayoutInflater();
+        View rowView = inflater.inflate(R.layout.row_group_info, null, true);
+
+        TextView txtTitle = (TextView) rowView.findViewById(R.id.txt);
+        ImageView imageView = (ImageView) rowView.findViewById(R.id.img);
+        txtTitle.setText(web.get(position).name);
+
+        new ImageDownloader(imageView).execute(web.get(position).participations.get(0).user.facebook_avatar_url);
+
+        /* if(position % 2 == 0) {
+            rowView.setBackgroundColor(0xFFF0F0F0);
+        } */
+
+        return rowView;
     }
 }
 
 public class LobbyActivity extends Activity {
     private static final String TAG = "LobbyActivity";
 
-    private TestData[] data = {
-            new TestData(1, 2, "Zuipen op maandag."),
-            new TestData(1, 2, "Zuipen op dinsdag."),
-            new TestData(1, 2, "Zuipen op woensdag."),
-            new TestData(1, 2, "Balansdag (zuipen)"),
-            new TestData(1, 2, "Zuipen op vrijdag.")
-    };
+
+    private List<Group> groupList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +113,8 @@ public class LobbyActivity extends Activity {
             @Override
             public void success(List<Group> list, Response response) {
                 Log.i(TAG, "Server gave grouplist.");
-                Root.getInstance().groupList = list;
-                for(Group group : list) {
+                groupList = list;
+                for(Group group : groupList) {
                     Log.i(TAG, "Group received: "+group.name);
                 }
                 makeTable();
@@ -108,56 +162,31 @@ public class LobbyActivity extends Activity {
 
     public void makeTable()
     {
-        TableLayout groups = (TableLayout)findViewById(R.id.table_groups);
-        groups.setStretchAllColumns(true);
-        groups.bringToFront();
-        int i = 0;
-        for(; i < data.length; i++){
-            TableRow tr =  new TableRow(this);
-            tr.setPadding(20, 20, 20, 20);
 
-            TextView c1 = new TextView(this);
-            c1.setText(data[i].name);
-            c1.setTextSize(20);
+        final ListView lv = (ListView)findViewById(R.id.list_view_groups);
+        GroupListAdapter adapter = new GroupListAdapter(this, groupList);
+        lv.setAdapter(adapter);
 
-            TextView c2 = new TextView(this);
-            c2.setText(String.valueOf(data[i].x));
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            TextView c3 = new TextView(this);
-            c3.setText(String.valueOf(data[i].y));
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Log.i("onItemClick", "Reach test");
 
-            tr.addView(c1);
-            tr.addView(c2);
-            tr.addView(c3);
+                // ListView Clicked item index
+                int itemPosition     = position;
 
-            if(i % 2 == 0) {
-                tr.setBackgroundColor(0xFFEEEEEE);
+                // ListView Clicked item value
+                Group  itemValue    = (Group) ((ListView)findViewById(R.id.list_view_groups)).getItemAtPosition(position);
+
+                // Show Alert
+                Log.i("LobbyClicked", "Position :"+itemPosition+"  ListItem : " +itemValue.name);
+
             }
-            groups.addView(tr);
-        }
-        for(Group group : Root.getInstance().groupList) {
-            TableRow tr =  new TableRow(this);
-            tr.setPadding(20, 20, 20, 20);
 
-            TextView c1 = new TextView(this);
-            c1.setText(group.name);
-            c1.setTextSize(20);
+        });
 
-            TextView c2 = new TextView(this);
-            c2.setText("hoi");
-
-            TextView c3 = new TextView(this);
-            c3.setText("17");
-
-            tr.addView(c1);
-            tr.addView(c2);
-            tr.addView(c3);
-
-            if(i % 2 == 0) {
-                tr.setBackgroundColor(0xFFEEEEEE);
-            }
-            ++i;
-            groups.addView(tr);
-        }
+        // make grid with profile pictures as test
     }
 }

@@ -6,6 +6,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -26,8 +29,17 @@ public class EveningActivity extends Activity {
 
         isDrinking = getrekt();
         isReady = false;
-    }
+    
+        ListView lv =  new ListView(this);
 
+        RelativeLayout myLayout = (RelativeLayout)findViewById(R.id.rel_layout_evening);
+        //ArrayAdapter and shit, get profile pictures
+        myLayout.addView(lv);
+
+        TextView c1 = new TextView(this);
+        c1.setText("John's round");
+        c1.setTextSize(20);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

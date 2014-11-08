@@ -4,11 +4,11 @@
     android:layout_height="match_parent"
     tools:context="hack.goodnight.itsonme.LobbyActivity">
 
-    <TableLayout
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/table_groups"
-        android:background="#ffffff"></TableLayout>
+        android:id="@+id/list_view_groups"
+        android:background="#ffffff"></ListView>
 
     <ImageButton
         android:layout_width="50dp"
