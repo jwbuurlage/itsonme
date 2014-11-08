@@ -2,6 +2,7 @@ package hack.goodnight.itsonme;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,12 +15,25 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class Login extends Activity {
+public class Login extends FragmentActivity {
+    private LoginFragment loginFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        if (savedInstanceState == null) {
+        // Add the fragment on initial activity setup
+            loginFragment = new LoginFragment();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(android.R.id.content, loginFragment)
+                    .commit();
+        } else {
+        // Or set the fragment from restored state info
+            loginFragment = (LoginFragment) getSupportFragmentManager()
+                    .findFragmentById(android.R.id.content);
+        }
+        //setContentView(R.layout.activity_login);
     }
 
 
