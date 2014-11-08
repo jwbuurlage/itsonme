@@ -13,7 +13,7 @@ import retrofit.http.Path;
  * Created by tom on 11/8/14.
  */
 public interface ServerInterface {
-    @POST("/groups")
+    @GET("/groups")
     void getGroup(Callback<Group> callback);
 
     @POST("/login")

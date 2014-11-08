@@ -19,8 +19,8 @@ public class Root {
 
     public ServerInterface getService(){
         if(service==null){
-            RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint("http://private-anon-265b71629-itsonme.apiary-mock.com").build();
-            ServerInterface service = restAdapter.create(ServerInterface.class);
+            RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint("https://itsonme.herokuapp.com").build();
+            service = restAdapter.create(ServerInterface.class);
         }
         return service;
     }
