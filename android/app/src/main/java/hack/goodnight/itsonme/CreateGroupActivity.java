@@ -64,7 +64,6 @@ public class CreateGroupActivity extends Activity {
             @Override
             public void success(Group group, Response response) {
                 Log.i(TAG, "Server gave group.");
-                Root.getInstance().groupList.add(group);
                 Root.getInstance().currentGroup = group;
                 startActivity(intent);
             }

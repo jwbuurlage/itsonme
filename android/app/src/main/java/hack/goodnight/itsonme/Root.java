@@ -39,7 +39,7 @@ public class Root {
     }
 
     //log out
-    public void reset(){ user = null; auth_token = null; }
+    public void reset(){ user = null; auth_token = null; groupList.clear(); currentGroup = null; }
 
     private String auth_token;
     public void setAuth(String token){ auth_token = token; }
