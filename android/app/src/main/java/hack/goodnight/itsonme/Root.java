@@ -25,7 +25,14 @@ public class Root {
         return service;
     }
 
+    //log out
+    public void reset(){ user = null; auth_token = null; }
+
     private String auth_token;
     public void setAuth(String token){ auth_token = token; }
     public String getAuth(){ return auth_token; }
+
+    private User user;
+    public User getUser(){ return user; }
+    public void setUser(User u){ user = u; }
 }
