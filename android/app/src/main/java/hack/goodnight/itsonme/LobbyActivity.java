@@ -48,6 +48,8 @@ public class LobbyActivity extends Activity {
             new TestData(1, 2, "Zuipen op vrijdag.")
     };
 
+    private List<Group> groupList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,11 +59,13 @@ public class LobbyActivity extends Activity {
         ServerInterface service = Root.getInstance().getService();
         service.getGroups(new retrofit.Callback<List<Group>>() {
             @Override
-            public void success(List<Group> grouplist, Response response) {
+            public void success(List<Group> list, Response response) {
                 Log.i(TAG, "Server gave grouplist.");
-                for(Group group : grouplist) {
+                groupList = list;
+                for(Group group : groupList) {
                     Log.i(TAG, "Group received: "+group.name);
                 }
+                makeTable();
             }
 
             @Override
@@ -71,38 +75,9 @@ public class LobbyActivity extends Activity {
             }
         });
 
-        TableLayout groups = (TableLayout)findViewById(R.id.table_groups);
-        groups.setStretchAllColumns(true);
-        groups.bringToFront();
-        for(int i = 0; i < data.length; i++){
-            TableRow tr =  new TableRow(this);
-            tr.setPadding(20, 20, 20, 20);
-
-            TextView c1 = new TextView(this);
-            c1.setText(data[i].name);
-            c1.setTextSize(20);
-
-            TextView c2 = new TextView(this);
-            c2.setText(String.valueOf(data[i].x));
-
-            TextView c3 = new TextView(this);
-            c3.setText(String.valueOf(data[i].y));
-
-            tr.addView(c1);
-            tr.addView(c2);
-            tr.addView(c3);
-
-            if(i % 2 == 0) {
-                tr.setBackgroundColor(0xFFEEEEEE);
-            }
-            groups.addView(tr);
-        }
-
-
         ImageButton but = (ImageButton)findViewById(R.id.createGroupButton);
         but.bringToFront();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -131,5 +106,60 @@ public class LobbyActivity extends Activity {
         Intent intent;
         intent = new Intent(this, CreateGroupActivity.class);
         startActivity(intent);
+    }
+
+    public void makeTable()
+    {
+        TableLayout groups = (TableLayout)findViewById(R.id.table_groups);
+        groups.setStretchAllColumns(true);
+        groups.bringToFront();
+        for(int i = 0; i < data.length; i++){
+            TableRow tr =  new TableRow(this);
+            tr.setPadding(20, 20, 20, 20);
+
+            TextView c1 = new TextView(this);
+            c1.setText(data[i].name);
+            c1.setTextSize(20);
+
+            TextView c2 = new TextView(this);
+            c2.setText(String.valueOf(data[i].x));
+
+            TextView c3 = new TextView(this);
+            c3.setText(String.valueOf(data[i].y));
+
+            tr.addView(c1);
+            tr.addView(c2);
+            tr.addView(c3);
+
+            if(i % 2 == 0) {
+                tr.setBackgroundColor(0xFFEEEEEE);
+            }
+            groups.addView(tr);
+        }
+        int i = 0;
+        for(Group group : groupList) {
+            TableRow tr =  new TableRow(this);
+            tr.setPadding(20, 20, 20, 20);
+
+            TextView c1 = new TextView(this);
+            c1.setText(group.name);
+            c1.setTextSize(20);
+
+            TextView c2 = new TextView(this);
+            c2.setText("hoi");
+
+            TextView c3 = new TextView(this);
+            c3.setText("17");
+
+            tr.addView(c1);
+            tr.addView(c2);
+            tr.addView(c3);
+
+            if(i % 2 == 0) {
+                tr.setBackgroundColor(0xFFEEEEEE);
+            }
+            ++i;
+            groups.addView(tr);
+        }
     }
 }

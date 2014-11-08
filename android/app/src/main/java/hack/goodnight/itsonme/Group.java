@@ -1,10 +1,10 @@
 package hack.goodnight.itsonme;
 
-/**
- * Created by tom on 11/8/14.
- */
+import java.util.List;
+
 public class Group {
     public int id;
     public String name;
+    public List<Participation> participations;
     public Participation my_participation;
 }
