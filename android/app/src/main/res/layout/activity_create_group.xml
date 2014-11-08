@@ -10,9 +10,10 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
+        android:id="@+id/groupNameText"
         android:layout_alignParentStart="false"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:enabled="true" />
 
     <Button
         android:layout_width="match_parent"

@@ -13,6 +13,8 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.LoginButton;
 
+import java.util.Arrays;
+
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -45,6 +47,7 @@ public class LoginFragment extends Fragment {
 
         LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
         authButton.setFragment(this);
+        authButton.setReadPermissions(Arrays.asList("email", "public_profile", "user_friends"));
 
         return view;
     }

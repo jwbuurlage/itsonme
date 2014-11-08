@@ -1,10 +1,13 @@
 package hack.goodnight.itsonme;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.TextView;
 
 
 public class CreateGroupActivity extends Activity {
@@ -13,8 +16,12 @@ public class CreateGroupActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_group);
-    }
 
+        TextView groupNameTextView = (TextView)findViewById(R.id.groupNameText);
+        if(groupNameTextView.requestFocus()) {
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -40,6 +47,8 @@ public class CreateGroupActivity extends Activity {
 
     public void startGroup(View v)
     {
-        // new activity
+        Intent intent;
+        intent = new Intent(this, EveningActivity.class);
+        startActivity(intent);
     }
 }
