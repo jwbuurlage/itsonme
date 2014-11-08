@@ -64,10 +64,12 @@ public class LoginFragment extends Fragment {
                 service.login(Root.getInstance().getAuth(), new retrofit.Callback<User>() {
                     @Override
                     public void success(User user, Response response) {
-                        view.findViewById(R.id.loadingBar).setVisibility(View.GONE);
+                        Root.getInstance().setUser(user);
                         Log.i(TAG, "User info: " + user.first_name);
-                        //Ready to open lobby now
-                        //openLobby();
+
+                        Login activ = (Login)getActivity();
+                        activ.openLobby(view);
+                        view.findViewById(R.id.loadingBar).setVisibility(View.GONE);
                     }
 
                     @Override
@@ -79,7 +81,7 @@ public class LoginFragment extends Fragment {
             }
 
         } else if (state.isClosed()) {
-            Root.getInstance().setAuth("");
+            Root.getInstance().reset();
             Log.i(TAG, "Logged out...");
         }
     }
