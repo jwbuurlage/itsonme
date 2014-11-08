@@ -113,7 +113,8 @@ public class LobbyActivity extends Activity {
         TableLayout groups = (TableLayout)findViewById(R.id.table_groups);
         groups.setStretchAllColumns(true);
         groups.bringToFront();
-        for(int i = 0; i < data.length; i++){
+        int i = 0;
+        for(; i < data.length; i++){
             TableRow tr =  new TableRow(this);
             tr.setPadding(20, 20, 20, 20);
 
@@ -136,7 +137,6 @@ public class LobbyActivity extends Activity {
             }
             groups.addView(tr);
         }
-        int i = 0;
         for(Group group : groupList) {
             TableRow tr =  new TableRow(this);
             tr.setPadding(20, 20, 20, 20);
