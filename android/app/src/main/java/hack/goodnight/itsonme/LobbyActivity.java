@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -25,38 +26,60 @@ import android.widget.TextView;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
+    ImageView bmImage;
 
-
-class GroupListAdapter extends ArrayAdapter<Group>{
-    class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public ImageDownloader(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String url = urls[0];
-            Bitmap mIcon = null;
-            try {
-                InputStream in = new java.net.URL(url).openStream();
-                mIcon = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-            }
-            return mIcon;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
+    public ImageDownloader(ImageView bmImage) {
+        this.bmImage = bmImage;
     }
 
+    protected Bitmap doInBackground(String... urls) {
+        String url = urls[0];
+        Bitmap mIcon = null;
+        try {
+            InputStream in = new java.net.URL(url).openStream();
+            mIcon = BitmapFactory.decodeStream(in);
+        } catch (Exception e) {
+            Log.e("Error", e.getMessage());
+        }
+        return mIcon;
+    }
+
+    protected void onPostExecute(Bitmap result) {
+        bmImage.setImageBitmap(result);
+    }
+}
+
+class ProfileGridAdapter extends ArrayAdapter<String> {
+    private final Activity context;
+    private final List<String> web;
+
+    public ProfileGridAdapter(Activity context,
+                              List<String> web) {
+        super(context, R.layout.profileimage, web);
+        this.context = context;
+        this.web = web;
+    }
+
+    @Override
+    public View getView(int position, View view, ViewGroup parent) {
+        LayoutInflater inflater = context.getLayoutInflater();
+        View rowView = inflater.inflate(R.layout.profileimage, null, true);
+
+        ImageView imgView = (ImageView) rowView.findViewById(R.id.img);
+        new ImageDownloader(imgView).execute(web.get(position));
+
+        return rowView;
+    }
+}
+
+class GroupListAdapter extends ArrayAdapter<Group>{
     private final Activity context;
     private final List<Group> web;
 
@@ -67,26 +90,24 @@ class GroupListAdapter extends ArrayAdapter<Group>{
         this.web = web;
     }
 
-    private static Drawable LoadImageFromWeb(String url) {
-        try {
-            InputStream is = (InputStream) new URL(url).getContent();
-            Drawable d = Drawable.createFromStream(is, "src name");
-            return d;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView = inflater.inflate(R.layout.row_group_info, null, true);
 
         TextView txtTitle = (TextView) rowView.findViewById(R.id.txt);
-        ImageView imageView = (ImageView) rowView.findViewById(R.id.img);
         txtTitle.setText(web.get(position).name);
 
-        new ImageDownloader(imageView).execute(web.get(position).participations.get(0).user.facebook_avatar_url);
+        GridView imageView = (GridView) rowView.findViewById(R.id.img);
+
+        List<String> a = new ArrayList<String>();
+        for(Participation p : web.get(position).participations) {
+            a.add(p.user.facebook_avatar_url);
+            Log.i("Found user: ", a.get(a.size() -1));
+        }
+
+        ProfileGridAdapter adapter = new ProfileGridAdapter((Activity)this.getContext(), a);
+        imageView.setAdapter(adapter);
 
         /* if(position % 2 == 0) {
             rowView.setBackgroundColor(0xFFF0F0F0);
@@ -162,7 +183,6 @@ public class LobbyActivity extends Activity {
 
     public void makeTable()
     {
-
         final ListView lv = (ListView)findViewById(R.id.list_view_groups);
         GroupListAdapter adapter = new GroupListAdapter(this, groupList);
         lv.setAdapter(adapter);
@@ -181,12 +201,11 @@ public class LobbyActivity extends Activity {
                 Group  itemValue    = (Group) ((ListView)findViewById(R.id.list_view_groups)).getItemAtPosition(position);
 
                 // Show Alert
-                Log.i("LobbyClicked", "Position :"+itemPosition+"  ListItem : " +itemValue.name);
+                Log.i("LobbyClicked", "Position :" + itemPosition + "  ListItem : " + itemValue.name);
 
             }
 
         });
 
-        // make grid with profile pictures as test
     }
 }
