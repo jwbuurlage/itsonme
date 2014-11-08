@@ -48,6 +48,7 @@ class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
         } catch (Exception e) {
             Log.e("Error", e.getMessage());
         }
+        mIcon = ImageHelper.getRoundedCornerBitmap(mIcon, mIcon.getHeight() / 2);
         return mIcon;
     }
 

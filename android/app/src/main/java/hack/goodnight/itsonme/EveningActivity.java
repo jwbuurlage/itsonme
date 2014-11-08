@@ -32,6 +32,8 @@ public class EveningActivity extends Activity {
         isDrinking = true;
         isReady = false;
 
+        setTitle(Root.getInstance().currentGroup.name);
+
         GridView gridView = (GridView)findViewById(R.id.gridView);
 
         List<String> a = new ArrayList<String>();
