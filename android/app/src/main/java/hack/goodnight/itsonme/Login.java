@@ -1,5 +1,7 @@
 package hack.goodnight.itsonme;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -85,5 +87,12 @@ public class Login extends FragmentActivity {
                 Log.e("ITSONMETAG", "RetrofitError details: " + retrofitError.getUrl() + ", repsonse = " + retrofitError.getResponse());
             }
         });
+    }
+
+    public void openLobby(View v)
+    {
+        Intent intent;
+        intent = new Intent(this, LobbyActivity.class);
+        startActivity(intent);
     }
 }

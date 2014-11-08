@@ -122,10 +122,5 @@ public class LoginFragment extends Fragment {
         uiHelper.onSaveInstanceState(outState);
     }
 
-    private void openLobby()
-    {
-        Intent intent;
-        intent = new Intent(getActivity().getApplication(), LobbyActivity.class);
-        startActivity(intent);
-    }
+
 }
