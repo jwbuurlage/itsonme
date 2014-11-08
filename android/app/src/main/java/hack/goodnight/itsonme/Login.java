@@ -7,7 +7,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.util.Log;
-import java.util.List;
 
 import com.facebook.AppEventsLogger;
 
