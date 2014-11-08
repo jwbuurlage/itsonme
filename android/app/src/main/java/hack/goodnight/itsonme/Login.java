@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
+import android.view.View;
 
 public class Login extends Activity {
 
@@ -51,5 +51,9 @@ public class Login extends Activity {
 
         // Logs 'app deactivate' App Event.
         AppEventsLogger.deactivateApp(this);
+    }
+
+    public void myEventFunction(View view) {
+        //Do stuff
     }
 }
