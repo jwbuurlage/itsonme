@@ -83,10 +83,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="retrofit-1.7.1" level="project" />
     <orderEntry type="library" exported="" name="gson-2.3" level="project" />
-<<<<<<< Updated upstream
     <orderEntry type="module" module-name="facebook" exported="" />
-=======
->>>>>>> Stashed changes
   </component>
 </module>
 
