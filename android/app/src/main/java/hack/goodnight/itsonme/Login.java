@@ -74,21 +74,6 @@ public class Login extends FragmentActivity {
         AppEventsLogger.deactivateApp(this);
     }
 
-    public void myEventFunction(View view) {
-        ServerInterface service = Root.getInstance().getService();
-        service.login("facebook_access_token="+ Root.getInstance().getAuth(), new retrofit.Callback<User>() {
-            @Override
-            public void success(User user, Response response) {
-                Log.d("ITSONMETAG","User info: "+user.first_name);
-            }
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                Log.e("ITSONMETAG", "RetrofitError: "+ retrofitError.getKind());
-                Log.e("ITSONMETAG", "RetrofitError details: " + retrofitError.getUrl() + ", repsonse = " + retrofitError.getResponse());
-            }
-        });
-    }
-
     public void openLobby(View v)
     {
         Intent intent;

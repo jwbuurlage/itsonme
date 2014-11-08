@@ -66,6 +66,7 @@ public class LoginFragment extends Fragment {
                     public void success(User user, Response response) {
                         view.findViewById(R.id.loadingBar).setVisibility(View.GONE);
                         Log.i(TAG, "User info: " + user.first_name);
+                        //Ready to open lobby now
                         //openLobby();
                     }
 
