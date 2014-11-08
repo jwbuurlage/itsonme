@@ -92,4 +92,9 @@ public class LoginFragment extends Fragment {
         super.onSaveInstanceState(outState);
         uiHelper.onSaveInstanceState(outState);
     }
+
+    private void openLobby()
+    {
+
+    }
 }
