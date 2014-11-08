@@ -4,9 +4,17 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+/* class ProfileImageGridView extends GridView
+{
+
+} */
 
 class TestData extends Object {
     public int x;
@@ -34,6 +42,8 @@ public class LobbyActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.activity_lobby);
+
         TableLayout groups = (TableLayout)findViewById(R.id.table_groups);
         groups.setStretchAllColumns(true);
         groups.bringToFront();
@@ -53,10 +63,15 @@ public class LobbyActivity extends Activity {
             tr.addView(c2);
             tr.addView(c3);
 
+            if(i % 2 == 0) {
+                tr.setBackgroundColor(0xFFEEEEEE);
+            }
             groups.addView(tr);
         }
 
-        setContentView(R.layout.activity_lobby);
+
+        ImageButton but = (ImageButton)findViewById(R.id.createGroupButton);
+        but.bringToFront();
     }
 
 

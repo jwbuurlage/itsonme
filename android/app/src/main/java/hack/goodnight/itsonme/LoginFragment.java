@@ -48,7 +48,7 @@ public class LoginFragment extends Fragment {
         if (state == SessionState.OPENED) {
             Log.i(TAG, "Logged in...");
             Log.i(TAG, "TOKEN: " + session.getAccessToken());
-            openLobby();
+
 
         } else if (state.isClosed()) {
             Log.i(TAG, "Logged out...");
@@ -94,10 +94,5 @@ public class LoginFragment extends Fragment {
         uiHelper.onSaveInstanceState(outState);
     }
 
-    private void openLobby()
-    {
-        Intent intent;
-        intent = new Intent(getActivity().getApplication(), LobbyActivity.class);
-        startActivity(intent);
-    }
+
 }

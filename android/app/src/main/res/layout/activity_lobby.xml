@@ -14,10 +14,11 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/createGroupButton"
-        android:background="@color/com_facebook_blue"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp" />
+        android:layout_marginBottom="20dp"
+        android:visibility="visible"
+        android:background="@drawable/com_facebook_button_check" />
 
 </RelativeLayout>
