@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/FriendPickerSample/FriendPickerSample.iml" filepath="$PROJECT_DIR$/FriendPickerSample/FriendPickerSample.iml" />
       <module fileurl="file://$PROJECT_DIR$/HelloFacebookSample/HelloFacebookSample.iml" filepath="$PROJECT_DIR$/HelloFacebookSample/HelloFacebookSample.iml" />
       <module fileurl="file://$PROJECT_DIR$/PlacePickerSample/PlacePickerSample.iml" filepath="$PROJECT_DIR$/PlacePickerSample/PlacePickerSample.iml" />
       <module fileurl="file://$PROJECT_DIR$/RPSSample/RPSSample.iml" filepath="$PROJECT_DIR$/RPSSample/RPSSample.iml" />
