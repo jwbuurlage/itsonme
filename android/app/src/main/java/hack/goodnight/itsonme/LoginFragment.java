@@ -48,7 +48,7 @@ public class LoginFragment extends Fragment {
         if (state == SessionState.OPENED) {
             Log.i(TAG, "Logged in...");
             Log.i(TAG, "TOKEN: " + session.getAccessToken());
-            //openLobby();
+            openLobby();
 
         } else if (state.isClosed()) {
             Log.i(TAG, "Logged out...");
