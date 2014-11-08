@@ -7,5 +7,6 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_lobby">Groups</string>
     <string name="title_activity_create_group">Create Group</string>
+    <string name="title_activity_evening">EveningActivity</string>
 
 </resources>

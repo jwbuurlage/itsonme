@@ -4,22 +4,21 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 
-public class CreateGroupActivity extends Activity {
+public class EveningActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_group);
+        setContentView(R.layout.activity_evening);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_create_group, menu);
+        getMenuInflater().inflate(R.menu.menu_evening, menu);
         return true;
     }
 
@@ -36,10 +35,5 @@ public class CreateGroupActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void startGroup(View v)
-    {
-        // new activity
     }
 }

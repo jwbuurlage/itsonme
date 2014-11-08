@@ -4,12 +4,20 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="hack.goodnight.itsonme.CreateGroupActivity">
+    tools:context="hack.goodnight.itsonme.CreateGroupActivity"
+    android:orientation="vertical">
 
     <EditText
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editText"
         android:layout_alignParentStart="false"
         android:layout_centerInParent="true" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create Group"
+        android:id="@+id/startGroupButton"
+        android:onClick="startGroup" />
 </LinearLayout>
