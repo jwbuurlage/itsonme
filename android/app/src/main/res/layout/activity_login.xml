@@ -5,16 +5,22 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".Login"
     android:id="@+id/l_login"
-    android:background="@drawable/yager2">
+    android:background="#10af81">
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="View Lobby"
+        android:text="View Groups"
         android:id="@+id/button"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:onClick="openLobby" />
+        android:layout_marginBottom="115dp"
+        android:onClick="openLobby"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentBottom="true"
+        android:background="#cccccc"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp" />
 
     <com.facebook.widget.LoginButton
         android:id="@+id/authButton"

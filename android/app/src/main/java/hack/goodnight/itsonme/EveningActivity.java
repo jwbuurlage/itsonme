@@ -6,10 +6,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.RetrofitError;
@@ -27,18 +29,19 @@ public class EveningActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_evening);
 
-        isDrinking = getrekt();
+        isDrinking = true;
         isReady = false;
-    
-        ListView lv =  new ListView(this);
 
-        RelativeLayout myLayout = (RelativeLayout)findViewById(R.id.rel_layout_evening);
-        //ArrayAdapter and shit, get profile pictures
-        myLayout.addView(lv);
+        GridView gridView = (GridView)findViewById(R.id.gridView);
 
-        TextView c1 = new TextView(this);
-        c1.setText("John's round");
-        c1.setTextSize(20);
+        List<String> a = new ArrayList<String>();
+        for(Participation p : Root.getInstance().currentGroup.participations) {
+            a.add(p.user.facebook_avatar_url);
+            Log.i("Found user: ", a.get(a.size() - 1));
+        }
+
+        ProfileGridAdapter adapter = new ProfileGridAdapter(this, a);
+        gridView.setAdapter(adapter);
     }
 
     @Override
@@ -63,13 +66,9 @@ public class EveningActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public boolean getrekt() {
-        return true;
-    }
-
     public void noMoreAlcoholClicked(View view) {
         //get toggle value from ui element
-        isDrinking = getrekt();
+        isDrinking = true;
         updateGroup();
     }
 
@@ -89,7 +88,7 @@ public class EveningActivity extends Activity {
             @Override
             public void failure(RetrofitError retrofitError) {
                 Log.e(TAG, "RetrofitError: " + retrofitError.getKind());
-                Log.e(TAG, "RetrofitError details: " + retrofitError.getUrl() + ", repsonse = " + retrofitError.getResponse());
+                Log.e(TAG, "RetrofitError details: " + retrofitError.getUrl() + ", response = " + retrofitError.getResponse());
             }
         });
     }
