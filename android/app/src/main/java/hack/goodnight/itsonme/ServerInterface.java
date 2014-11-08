@@ -6,6 +6,9 @@ import retrofit.Callback;
 import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.POST;
+import retrofit.http.Field;
+import retrofit.http.FormUrlEncoded;
+import retrofit.mime.TypedString;
 import retrofit.http.Path;
 
 /**
@@ -16,6 +19,7 @@ public interface ServerInterface {
     @GET("/groups")
     void getGroup(Callback<Group> callback);
 
+    @FormUrlEncoded
     @POST("/login")
-    void login(@Body String AuthTokenString, Callback<User> callback);
+    void login(@Field("facebook_access_token") String AuthToken, Callback<User> callback);
 }

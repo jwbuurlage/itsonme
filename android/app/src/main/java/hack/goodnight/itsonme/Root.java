@@ -19,7 +19,7 @@ public class Root {
 
     public ServerInterface getService(){
         if(service==null){
-            RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint("https://itsonme.herokuapp.com").build();
+            RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint("https://itsonme-herokuapp-com-yfv0yulj1uzi.runscope.net").build();
             service = restAdapter.create(ServerInterface.class);
         }
         return service;

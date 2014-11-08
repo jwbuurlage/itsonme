@@ -61,7 +61,7 @@ public class LoginFragment extends Fragment {
                 view.findViewById(R.id.loadingBar).setVisibility(View.VISIBLE);
 
                 ServerInterface service = Root.getInstance().getService();
-                service.login("facebook_access_token=" + Root.getInstance().getAuth(), new retrofit.Callback<User>() {
+                service.login(Root.getInstance().getAuth(), new retrofit.Callback<User>() {
                     @Override
                     public void success(User user, Response response) {
                         view.findViewById(R.id.loadingBar).setVisibility(View.GONE);
