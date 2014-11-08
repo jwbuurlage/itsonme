@@ -5,10 +5,15 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
+import android.util.Log;
+import java.util.List;
 
 import com.facebook.AppEventsLogger;
 
 import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class Login extends Activity {
 
@@ -58,13 +63,27 @@ public class Login extends Activity {
     }
 
     public void myEventFunction(View view) {
-        //Do stuff
-
-
         //TODO Do this at a global point
         RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint("http://private-anon-265b71629-itsonme.apiary-mock.com").build();
-
         ServerInterface service = restAdapter.create(ServerInterface.class);
 
+        service.getGroup(new retrofit.Callback<Group>(){
+            @Override
+            public void success(Group group, Response response) {
+                TextView mylabel = (TextView) findViewById(R.id.textViewMiddle);
+                mylabel.setText("Sweet succes!...");
+                Log.d("ITSONMETAG","Group info: "+group.name+" and "+group.id);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                TextView mylabel = (TextView) findViewById(R.id.textViewMiddle);
+                mylabel.setText("ERROR :(");
+                Log.d("ITSONMETAG", "for fucks sake. error = "+ retrofitError.getKind());
+                Log.d("ITSONMETAG", "for fucks sake. other stuff = "+ retrofitError.getUrl() + ", repsonse = " + retrofitError.getResponse());
+            }
+        });
+        TextView mylabel = (TextView) findViewById(R.id.textViewMiddle);
+        mylabel.setText("Loading...");
     }
 }
