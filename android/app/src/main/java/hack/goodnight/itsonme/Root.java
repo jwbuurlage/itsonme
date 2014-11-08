@@ -1,5 +1,7 @@
 package hack.goodnight.itsonme;
 
+import java.util.List;
+
 import retrofit.RestAdapter;
 import retrofit.RequestInterceptor;
 
@@ -46,4 +48,7 @@ public class Root {
     private User user;
     public User getUser(){ return user; }
     public void setUser(User u){ user = u; }
+
+    public List<Group> groupList;
+    public Group currentGroup;
 }

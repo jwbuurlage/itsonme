@@ -2,16 +2,30 @@ package hack.goodnight.itsonme;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import java.util.List;
+
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class EveningActivity extends Activity {
+    private static final String TAG = "EveningActivity";
+
+    private boolean isDrinking;
+    private boolean isReady;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_evening);
+
+        isDrinking = getrekt();
+        isReady = false;
     }
 
 
@@ -35,5 +49,36 @@ public class EveningActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public boolean getrekt() {
+        return true;
+    }
+
+    public void noMoreAlcoholClicked(View view) {
+        //get toggle value from ui element
+        isDrinking = getrekt();
+        updateGroup();
+    }
+
+    public void iAmReadyClicked(View view) {
+        isReady = true;
+        updateGroup();
+    }
+
+    public void updateGroup() {
+        ServerInterface service = Root.getInstance().getService();
+        service.updateParticipation(Root.getInstance().currentGroup.id, isDrinking, isReady, new retrofit.Callback<Group>() {
+            @Override
+            public void success(Group updatedGroup, Response response) {
+                Log.i(TAG, "group updated.");
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.e(TAG, "RetrofitError: " + retrofitError.getKind());
+                Log.e(TAG, "RetrofitError details: " + retrofitError.getUrl() + ", repsonse = " + retrofitError.getResponse());
+            }
+        });
     }
 }

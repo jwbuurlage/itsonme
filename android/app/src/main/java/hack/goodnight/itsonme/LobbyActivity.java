@@ -48,8 +48,6 @@ public class LobbyActivity extends Activity {
             new TestData(1, 2, "Zuipen op vrijdag.")
     };
 
-    private List<Group> groupList;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,8 +59,8 @@ public class LobbyActivity extends Activity {
             @Override
             public void success(List<Group> list, Response response) {
                 Log.i(TAG, "Server gave grouplist.");
-                groupList = list;
-                for(Group group : groupList) {
+                Root.getInstance().groupList = list;
+                for(Group group : list) {
                     Log.i(TAG, "Group received: "+group.name);
                 }
                 makeTable();
@@ -137,7 +135,7 @@ public class LobbyActivity extends Activity {
             }
             groups.addView(tr);
         }
-        for(Group group : groupList) {
+        for(Group group : Root.getInstance().groupList) {
             TableRow tr =  new TableRow(this);
             tr.setPadding(20, 20, 20, 20);
 
