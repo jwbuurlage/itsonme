@@ -10,16 +10,6 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="THE BUTT0N"
-        android:id="@+id/button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="69dp"
-        android:onClick="myEventFunction"
-        android:layout_centerVertical="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="View Lobby"
         android:id="@+id/button"
         android:layout_centerHorizontal="true"
@@ -36,5 +26,13 @@
         android:layout_alignParentTop="false"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="50dp" />
+
+    <ProgressBar
+        android:id="@+id/loadingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:indeterminate="true" />
 
 </RelativeLayout>

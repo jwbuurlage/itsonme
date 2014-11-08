@@ -13,9 +13,13 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.LoginButton;
 
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
 public class LoginFragment extends Fragment {
     private static final String TAG = "LoginFragment";
     private UiLifecycleHelper uiHelper;
+    private View view;
 
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
@@ -35,8 +39,9 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
-        View view;
         view = inflater.inflate(R.layout.activity_login, container, false);
+
+        view.findViewById(R.id.loadingBar).setVisibility(View.GONE);
 
         LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
         authButton.setFragment(this);
@@ -49,8 +54,32 @@ public class LoginFragment extends Fragment {
             Log.i(TAG, "Logged in...");
             Log.i(TAG, "TOKEN: " + session.getAccessToken());
 
+            //If it is not the second login
+            if(session.getAccessToken() != Root.getInstance().getAuth()) {
+                Root.getInstance().setAuth(session.getAccessToken());
+
+                view.findViewById(R.id.loadingBar).setVisibility(View.VISIBLE);
+
+                ServerInterface service = Root.getInstance().getService();
+                service.login(Root.getInstance().getAuth(), new retrofit.Callback<User>() {
+                    @Override
+                    public void success(User user, Response response) {
+                        view.findViewById(R.id.loadingBar).setVisibility(View.GONE);
+                        Log.i(TAG, "User info: " + user.first_name);
+                        //Ready to open lobby now
+                        //openLobby();
+                    }
+
+                    @Override
+                    public void failure(RetrofitError retrofitError) {
+                        Log.e(TAG, "RetrofitError: " + retrofitError.getKind());
+                        Log.e(TAG, "RetrofitError details: " + retrofitError.getUrl() + ", repsonse = " + retrofitError.getResponse());
+                    }
+                });
+            }
 
         } else if (state.isClosed()) {
+            Root.getInstance().setAuth("");
             Log.i(TAG, "Logged out...");
         }
     }

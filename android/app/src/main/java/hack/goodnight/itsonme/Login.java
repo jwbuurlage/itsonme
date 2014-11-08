@@ -4,14 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.util.Log;
 
 import com.facebook.AppEventsLogger;
 
-import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -73,21 +72,6 @@ public class Login extends FragmentActivity {
 
         // Logs 'app deactivate' App Event.
         AppEventsLogger.deactivateApp(this);
-    }
-
-    public void myEventFunction(View view) {
-        ServerInterface service = Root.getInstance().getService();
-        service.login("facebook_access_token="+ Root.getInstance().getAuth(), new retrofit.Callback<User>() {
-            @Override
-            public void success(User user, Response response) {
-                Log.d("ITSONMETAG","User info: "+user.first_name);
-            }
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                Log.e("ITSONMETAG", "RetrofitError: "+ retrofitError.getKind());
-                Log.e("ITSONMETAG", "RetrofitError details: " + retrofitError.getUrl() + ", repsonse = " + retrofitError.getResponse());
-            }
-        });
     }
 
     public void openLobby(View v)
