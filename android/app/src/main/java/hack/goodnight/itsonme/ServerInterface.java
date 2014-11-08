@@ -17,7 +17,11 @@ import retrofit.http.Path;
  */
 public interface ServerInterface {
     @GET("/groups")
-    void getGroup(Callback<Group> callback);
+    void getGroups(Callback<List<Group>> callback);
+
+    @FormUrlEncoded
+    @POST("/groups")
+    void createGroup(@Field("name") String groupname, Callback<Group> callback);
 
     @FormUrlEncoded
     @POST("/login")

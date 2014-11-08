@@ -3,6 +3,7 @@ package hack.goodnight.itsonme;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +13,11 @@ import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import java.util.List;
+
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /* class ProfileImageGridView extends GridView
 {
@@ -32,6 +38,8 @@ class TestData extends Object {
 }
 
 public class LobbyActivity extends Activity {
+    private static final String TAG = "LobbyActivity";
+
     private TestData[] data = {
             new TestData(1, 2, "Zuipen op maandag."),
             new TestData(1, 2, "Zuipen op dinsdag."),
@@ -45,6 +53,23 @@ public class LobbyActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_lobby);
+
+        ServerInterface service = Root.getInstance().getService();
+        service.getGroups(new retrofit.Callback<List<Group>>() {
+            @Override
+            public void success(List<Group> grouplist, Response response) {
+                Log.i(TAG, "Server gave grouplist.");
+                for(Group group : grouplist) {
+                    Log.i(TAG, "Group received: "+group.name);
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.e(TAG, "RetrofitError: " + retrofitError.getKind());
+                Log.e(TAG, "RetrofitError details: " + retrofitError.getUrl() + ", repsonse = " + retrofitError.getResponse());
+            }
+        });
 
         TableLayout groups = (TableLayout)findViewById(R.id.table_groups);
         groups.setStretchAllColumns(true);

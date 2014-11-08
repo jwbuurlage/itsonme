@@ -3,14 +3,21 @@ package hack.goodnight.itsonme;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import java.util.List;
+
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
 
 public class CreateGroupActivity extends Activity {
+    private static final String TAG = "CreateGroupActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +54,24 @@ public class CreateGroupActivity extends Activity {
 
     public void startGroup(View v)
     {
-        Intent intent;
-        intent = new Intent(this, EveningActivity.class);
-        startActivity(intent);
+        TextView groupTextView = (TextView)findViewById(R.id.groupNameText);
+        String groupName = groupTextView.getText().toString();
+
+        final Intent intent = new Intent(this, EveningActivity.class);
+
+        ServerInterface service = Root.getInstance().getService();
+        service.createGroup(groupName, new retrofit.Callback<Group>() {
+            @Override
+            public void success(Group group, Response response) {
+                Log.i(TAG, "Server gave group.");
+                startActivity(intent);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.e(TAG, "RetrofitError: " + retrofitError.getKind());
+                Log.e(TAG, "RetrofitError details: " + retrofitError.getUrl() + ", repsonse = " + retrofitError.getResponse());
+            }
+        });
     }
 }

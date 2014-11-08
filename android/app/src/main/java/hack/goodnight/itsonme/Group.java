@@ -6,4 +6,5 @@ package hack.goodnight.itsonme;
 public class Group {
     public int id;
     public String name;
+    public Participation my_participation;
 }
