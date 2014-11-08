@@ -74,6 +74,7 @@ public class LoginFragment extends Fragment {
 
                     @Override
                     public void failure(RetrofitError retrofitError) {
+                        view.findViewById(R.id.loadingBar).setVisibility(View.GONE);
                         Log.e(TAG, "RetrofitError: " + retrofitError.getKind());
                         Log.e(TAG, "RetrofitError details: " + retrofitError.getUrl() + ", repsonse = " + retrofitError.getResponse());
                     }
