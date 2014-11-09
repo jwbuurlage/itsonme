@@ -58,13 +58,32 @@ public class LoginFragment extends Fragment {
             Log.i(TAG, "TOKEN: " + session.getAccessToken());
 
             //If it is not the second login
-            if(session.getAccessToken() != Root.getInstance().getAuth()) {
-                Root.getInstance().setAuth(session.getAccessToken());
+            if(session.getAccessToken() != Root.getInstance().auth_token) {
+                Root.getInstance().auth_token = session.getAccessToken();
+
+                //This is not completely legit because of concurrency issues
+                if(Root.getInstance().gcmRegId.isEmpty() == false) {
+                    ServerInterface service = Root.getInstance().getService();
+                    service.sendPushToken(Root.getInstance().gcmRegId, new retrofit.Callback<User>() {
+                        @Override
+                        public void success(User user, Response response) {
+                            Root.getInstance().setUser(user);
+                            Log.i(TAG, "Sent GoogleCloudMessaging regid to server.");
+                        }
+
+                        @Override
+                        public void failure(RetrofitError retrofitError) {
+                            Log.e(TAG, "RetrofitError: " + retrofitError.getKind());
+                            Log.e(TAG, "RetrofitError details: " + retrofitError.getUrl() + ", repsonse = " + retrofitError.getResponse());
+                        }
+                    });
+                }
+                Root.getInstance().loggedInFacebook = true;
 
                 view.findViewById(R.id.loadingBar).setVisibility(View.VISIBLE);
 
                 ServerInterface service = Root.getInstance().getService();
-                service.login(Root.getInstance().getAuth(), new retrofit.Callback<User>() {
+                service.login(Root.getInstance().auth_token, new retrofit.Callback<User>() {
                     @Override
                     public void success(User user, Response response) {
                         Root.getInstance().setUser(user);

@@ -178,26 +178,38 @@ public class LobbyActivity extends Activity {
                 int itemPosition     = position;
 
                 // ListView Clicked item value
-                Group  itemValue    = (Group) ((ListView)findViewById(R.id.list_view_groups)).getItemAtPosition(position);
+                Group  group    = (Group) ((ListView)findViewById(R.id.list_view_groups)).getItemAtPosition(position);
 
                 // Show Alert
-                Log.i("LobbyClicked", "Position :" + itemPosition + "  ListItem : " + itemValue.name);
+                Log.i("LobbyClicked", "Position :" + itemPosition + "  ListItem : " + group.name);
 
-                ServerInterface service = Root.getInstance().getService();
-                service.joinGroup(itemValue.id, new retrofit.Callback<Group>() {
-                    @Override
-                    public void success(Group group, Response response) {
-                        Log.i(TAG, "Group joined. Server gave group.");
+                boolean alreadyInGroup = false;
+
+                for(Participation part : group.participations)
+                    if(part.user.id == Root.getInstance().getUser().id){
+                        //already joined
                         Root.getInstance().currentGroup = group;
+                        alreadyInGroup = true;
                         startActivity(intent);
                     }
-                    @Override
-                    public void failure(RetrofitError retrofitError) {
-                        Log.e(TAG, "RetrofitError: " + retrofitError.getKind());
-                        Log.e(TAG, "RetrofitError details: " + retrofitError.getUrl() + ", repsonse = " + retrofitError.getResponse());
-                    }
-                });
 
+                if(!alreadyInGroup) {
+                    ServerInterface service = Root.getInstance().getService();
+                    service.joinGroup(group.id, new retrofit.Callback<Group>() {
+                        @Override
+                        public void success(Group group, Response response) {
+                            Log.i(TAG, "Group joined. Server gave group.");
+                            Root.getInstance().currentGroup = group;
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void failure(RetrofitError retrofitError) {
+                            Log.e(TAG, "RetrofitError: " + retrofitError.getKind());
+                            Log.e(TAG, "RetrofitError details: " + retrofitError.getUrl() + ", repsonse = " + retrofitError.getResponse());
+                        }
+                    });
+                }
             }
 
         });
