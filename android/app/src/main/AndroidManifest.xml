@@ -52,7 +52,6 @@
         </activity>
         <activity
             android:name="hack.goodnight.itsonme.LobbyActivity"
-            android:noHistory="true"
             android:label="@string/title_activity_lobby"
             android:parentActivityName="hack.goodnight.itsonme.Login" >
             <meta-data

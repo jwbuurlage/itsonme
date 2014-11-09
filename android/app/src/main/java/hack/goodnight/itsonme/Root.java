@@ -43,19 +43,12 @@ public class Root {
         auth_token = "";
         loggedInFacebook = false;
         user = null;
-        if(groupList != null) groupList.clear();
-        groupList = null;
         currentGroup = null;
     }
 
     public String auth_token; //facebook token
     public String gcmRegId; //google cloud messaging registration id
     public boolean loggedInFacebook = false;
-
-    private User user;
-    public User getUser(){ return user; }
-    public void setUser(User u){ user = u; }
-
-    public List<Group> groupList;
+    public User user;
     public Group currentGroup;
 }

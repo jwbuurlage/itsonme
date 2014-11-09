@@ -7,21 +7,6 @@
     android:id="@+id/l_login"
     android:background="@drawable/background">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="View Groups"
-        android:id="@+id/button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="115dp"
-        android:onClick="openLobby"
-        android:layout_alignParentEnd="false"
-        android:layout_alignParentTop="false"
-        android:layout_alignParentBottom="true"
-        android:background="#cccccc"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp" />
-
     <com.facebook.widget.LoginButton
         android:id="@+id/authButton"
         android:layout_width="wrap_content"
@@ -32,13 +17,4 @@
         android:layout_alignParentTop="false"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="50dp" />
-
-    <ProgressBar
-        android:id="@+id/loadingBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:indeterminate="true" />
-
 </RelativeLayout>

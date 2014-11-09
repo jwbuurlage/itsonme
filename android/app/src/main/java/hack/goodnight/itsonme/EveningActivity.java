@@ -1,6 +1,7 @@
 package hack.goodnight.itsonme;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -14,9 +15,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+class LeftGroup{
+}
 
 public class EveningActivity extends Activity {
     private static final String TAG = "ITSONME_EveningActivity";
@@ -29,8 +33,12 @@ public class EveningActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_evening);
 
+        Log.i(TAG, "onCreate!!!");
+
         isDrinking = true;
         isReady = false;
+
+        EventBus.getDefault().register(this);
 
         setTitle(Root.getInstance().currentGroup.name);
 
@@ -43,6 +51,12 @@ public class EveningActivity extends Activity {
 
         ProfileGridAdapter adapter = new ProfileGridAdapter(this, a);
         gridView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -61,6 +75,9 @@ public class EveningActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }else if(id == R.id.action_leave) {
+            leaveGroup();
             return true;
         }
 
@@ -83,7 +100,7 @@ public class EveningActivity extends Activity {
     public void updateGroup() {
         int partId = -1;
         for(Participation part : Root.getInstance().currentGroup.participations){
-            if( part.user.id == Root.getInstance().getUser().id ){
+            if( part.user.id == Root.getInstance().user.id ){
                 partId = part.id;
                 break;
             }
@@ -102,6 +119,38 @@ public class EveningActivity extends Activity {
             public void failure(RetrofitError retrofitError) {
                 Log.e(TAG, "RetrofitError: " + retrofitError.getKind());
                 Log.e(TAG, "RetrofitError details: " + retrofitError.getUrl() + ", response = " + retrofitError.getResponse());
+            }
+        });
+    }
+
+    public void onEventMainThread(LeftGroup event) {
+        Intent intent = new Intent(this, LobbyActivity.class);
+        startActivity(intent);
+        this.finish();
+    }
+
+    public void leaveGroup() {
+        int partId = -1;
+        for(Participation part : Root.getInstance().currentGroup.participations){
+            if( part.user.id == Root.getInstance().user.id ){
+                partId = part.id;
+                break;
+            }
+        }
+        Log.i(TAG, "Leaving group. Participation id "+partId);
+
+        ServerInterface service = Root.getInstance().getService();
+        service.leaveGroup(partId, new retrofit.Callback<Group>() {
+            @Override
+            public void success(Group updatedGroup, Response response) {
+                Root.getInstance().currentGroup = null;
+                EventBus.getDefault().post(new LeftGroup());
+                Log.i(TAG, "Successfully left group.");
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.e(TAG, "RetrofitError. TYPE:" + retrofitError.getKind() + " URL: " + retrofitError.getUrl());
             }
         });
     }

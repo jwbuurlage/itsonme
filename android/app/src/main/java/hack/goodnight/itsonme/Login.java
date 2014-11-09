@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.facebook.AppEventsLogger;
+import com.facebook.Session;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
@@ -42,6 +43,13 @@ public class Login extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+        boolean result = false;
+        if(intent.getBooleanExtra("logout", result) && result){
+            Session.getActiveSession().closeAndClearTokenInformation();
+        }
+
         if (savedInstanceState == null) {
         // Add the fragment on initial activity setup
             loginFragment = new LoginFragment();
@@ -55,6 +63,8 @@ public class Login extends FragmentActivity {
                     .findFragmentById(android.R.id.content);
         }
         //setContentView(R.layout.activity_login);
+
+        Log.i(TAG, "onCreate!!!");
 
         context = getApplicationContext();
         gcm = GoogleCloudMessaging.getInstance(this);
@@ -90,6 +100,8 @@ public class Login extends FragmentActivity {
     protected void onResume() {
         super.onResume();
 
+        Log.i(TAG, "onResume!!!");
+
         // Logs 'install' and 'app activate' App Events.
         AppEventsLogger.activateApp(this);
     }
@@ -98,11 +110,13 @@ public class Login extends FragmentActivity {
     protected void onPause() {
         super.onPause();
 
+        Log.i(TAG, "onPause!!!");
+
         // Logs 'app deactivate' App Event.
         AppEventsLogger.deactivateApp(this);
     }
 
-    public void openLobby(View v)
+    public void openLobby()
     {
         Intent intent;
         intent = new Intent(this, LobbyActivity.class);
@@ -228,7 +242,7 @@ public class Login extends FragmentActivity {
             service.sendPushToken(regid, new retrofit.Callback<User>() {
                 @Override
                 public void success(User user, Response response) {
-                    Root.getInstance().setUser(user);
+                    Root.getInstance().user = user;
                     Log.i(TAG, "Sent GoogleCloudMessaging regid to server (new registration).");
                 }
                 @Override

@@ -44,35 +44,26 @@ public class LoginFragment extends Fragment {
                              ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.activity_login, container, false);
-
-        view.findViewById(R.id.loadingBar).setVisibility(View.GONE);
-
         LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
         authButton.setFragment(this);
         authButton.setReadPermissions(Arrays.asList("email", "public_profile", "user_friends"));
-
         return view;
     }
 
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
         if (state == SessionState.OPENED) {
-            Log.i(TAG, "Logged in...");
-            Log.i(TAG, "TOKEN: " + session.getAccessToken());
-
+            Log.i(TAG, "Facebook Session State = OPENED");
             //If it is not the second login
-            if(session.getAccessToken() != Root.getInstance().auth_token) {
+            //if(session.getAccessToken() != Root.getInstance().auth_token) {
                 Root.getInstance().auth_token = session.getAccessToken();
                 Root.getInstance().loggedInFacebook = true;
-
-                view.findViewById(R.id.loadingBar).setVisibility(View.VISIBLE);
-
-                Login activ = (Login)getActivity();
-                activ.openLobby(view);
-            }
+                Login activity = (Login)getActivity();
+                activity.openLobby();
+            //}
 
         } else if (state.isClosed()) {
             Root.getInstance().reset();
-            Log.i(TAG, "Logged out...");
+            Log.i(TAG, "Facebook Session State = CLOSED");
         }
     }
 

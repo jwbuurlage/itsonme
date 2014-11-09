@@ -33,4 +33,13 @@
         android:clickable="true"
         android:onClick="createGroup" />
 
+    <ProgressBar
+        android:id="@+id/loadingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        style="?android:attr/progressBarStyleLarge"
+        android:indeterminate="true" />
+
 </RelativeLayout>

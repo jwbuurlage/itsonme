@@ -82,6 +82,10 @@ class GroupListAdapter extends ArrayAdapter<Group>{
     }
 }
 
+class LoggedInServer
+{
+}
+
 class GroupListChanged
 {
     List<Group> list;
@@ -102,7 +106,8 @@ public class LobbyActivity extends Activity {
     private static final String TAG = "ITSONME_LobbyActivity";
 
     private List<Group> groupList;
-    private Group currentGroupDummy; //only for debugging
+    //we request currentGroup and allGroups simultaneously. If we first receive currentGroup, and allGroups afterwards, then allGroups has to know that we already got a group
+    boolean isInGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +117,7 @@ public class LobbyActivity extends Activity {
         ImageButton but = (ImageButton)findViewById(R.id.createGroupButton);
         but.bringToFront();
 
-        onLaunch(); //TODO: onCreate vs onIntent vs on opened from standby etc
+        onLaunch(); //TODO: should this happen at onCreate or at other variants. only when savedInstanceState == null ?
     }
 
     @Override
@@ -138,6 +143,13 @@ public class LobbyActivity extends Activity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }else if(id == R.id.action_logout){
+            Intent intent;
+            intent = new Intent(this, CreateGroupActivity.class);
+            intent.putExtra("logout", true);
+            startActivity(intent);
+            this.finish();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -151,36 +163,35 @@ public class LobbyActivity extends Activity {
     }
 
     public void onLaunch() {
+        // - login at our server
+        // - send google cloud message id
+        // - request current group
+        // - if in a group, go to evening activity
+        // - if not, show group list (this activity)
+
+        isInGroup = false;
+        findViewById(R.id.createGroupButton).setVisibility(View.GONE);
+        findViewById(R.id.loadingBar).setVisibility(View.VISIBLE);
+
         ServerInterface service = Root.getInstance().getService();
         service.login(Root.getInstance().auth_token, new retrofit.Callback<User>() {
             @Override
             public void success(User user, Response response) {
-                Root.getInstance().setUser(user);
+                Root.getInstance().user = user;
                 Log.i(TAG, "User info: " + user.first_name);
-                view.findViewById(R.id.loadingBar).setVisibility(View.GONE);
+                EventBus.getDefault().post(new LoggedInServer());
             }
-
             @Override
             public void failure(RetrofitError retrofitError) {
-                view.findViewById(R.id.loadingBar).setVisibility(View.GONE);
-                Log.e(TAG, "RetrofitError: " + retrofitError.getKind());
-                Log.e(TAG, "RetrofitError details: " + retrofitError.getUrl() + ", repsonse = " + retrofitError.getResponse());
+                findViewById(R.id.loadingBar).setVisibility(View.GONE);
+                Log.e(TAG, "RetrofitError. TYPE:" + retrofitError.getKind() + " URL: " + retrofitError.getUrl());
             }
         });
+    }
 
-
+    public void onEventMainThread(LoggedInServer event) {
         ServerInterface service = Root.getInstance().getService();
-        service.getGroups(new retrofit.Callback<List<Group>>() {
-            @Override
-            public void success(List<Group> list, Response response) {
-                EventBus.getDefault().post(new GroupListChanged(list));
-            }
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                Log.e(TAG, "RetrofitError: " + retrofitError.getKind());
-                Log.e(TAG, "RetrofitError details: " + retrofitError.getUrl() + ", repsonse = " + retrofitError.getResponse());
-            }
-        });
+        //Always send Google Cloud Messaging id to be sure
         if(!Root.getInstance().gcmRegId.isEmpty()) {
             service.sendPushToken(Root.getInstance().gcmRegId, new retrofit.Callback<User>() {
                 @Override
@@ -189,11 +200,11 @@ public class LobbyActivity extends Activity {
                 }
                 @Override
                 public void failure(RetrofitError retrofitError) {
-                    Log.e(TAG, "RetrofitError: " + retrofitError.getKind());
-                    Log.e(TAG, "RetrofitError details: " + retrofitError.getUrl() + ", repsonse = " + retrofitError.getResponse());
+                    Log.e(TAG, "RetrofitError. TYPE:" + retrofitError.getKind() + " URL: " + retrofitError.getUrl());
                 }
             });
         }
+        //Check if we are currently in a group
         service.getCurrentGroup(new retrofit.Callback<Group>() {
             @Override
             public void success(Group group, Response response) {
@@ -201,27 +212,38 @@ public class LobbyActivity extends Activity {
             }
             @Override
             public void failure(RetrofitError retrofitError) {
-                Log.e(TAG, "RetrofitError: " + retrofitError.getKind());
-                Log.e(TAG, "RetrofitError details: " + retrofitError.getUrl() + ", repsonse = " + retrofitError.getResponse());
+                Log.e(TAG, "RetrofitError. TYPE:" + retrofitError.getKind() + " URL: " + retrofitError.getUrl());
+            }
+        });
+        //Also get list of other groups
+        service.getGroups(new retrofit.Callback<List<Group>>() {
+            @Override
+            public void success(List<Group> list, Response response) {
+                EventBus.getDefault().post(new GroupListChanged(list));
+            }
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.e(TAG, "RetrofitError. TYPE:" + retrofitError.getKind() + " URL: " + retrofitError.getUrl());
             }
         });
     }
 
     public void onEventMainThread(GroupListChanged event) {
         groupList = event.list;
-        Root.getInstance().groupList = event.list;
         for(Group g : groupList)
             Log.i(TAG, "Grouplist entry: "+g.name);
-        if(currentGroupDummy != null) groupList.add(currentGroupDummy);
-        makeTable();
+        if(isInGroup == false) {
+            makeTable();
+        }
+        findViewById(R.id.loadingBar).setVisibility(View.GONE);
+        findViewById(R.id.createGroupButton).setVisibility(View.VISIBLE);
     }
     public void onEventMainThread(ReceivedCurrentGroup event) {
-        Log.i(TAG, "Received currentgroup: "+event.g.name);
-        currentGroupDummy = event.g;
-        if(groupList != null) {
-            groupList.add(event.g);
-            makeTable();
-            Log.i(TAG,"Table should be refreshed.");
+        if(event.g != null && event.g.name.isEmpty() == false){
+            Log.i(TAG, "Received currentgroup: " + event.g.name);
+            isInGroup = true;
+            EventBus.getDefault().post(new EveningJoined(event.g));
+            findViewById(R.id.loadingBar).setVisibility(View.GONE);
         }
     }
 
@@ -229,6 +251,7 @@ public class LobbyActivity extends Activity {
         Root.getInstance().currentGroup = event.g;
         Intent intent = new Intent(this, EveningActivity.class);
         startActivity(intent);
+        this.finish(); //when the user presses 'Back' at the evening screen, he should exit the app, not go to the lobby!!!
     }
 
     public void makeTable()
@@ -256,7 +279,7 @@ public class LobbyActivity extends Activity {
                 boolean alreadyInGroup = false;
 
                 for(Participation part : group.participations)
-                    if(part.user.id == Root.getInstance().getUser().id){
+                    if(part.user.id == Root.getInstance().user.id){
                         //already joined
                         EventBus.getDefault().post(new EveningJoined(group));
                         alreadyInGroup = true;
@@ -270,11 +293,9 @@ public class LobbyActivity extends Activity {
                             Log.i(TAG, "Group joined. Server gave group.");
                             EventBus.getDefault().post(new EveningJoined(group));
                         }
-
                         @Override
                         public void failure(RetrofitError retrofitError) {
-                            Log.e(TAG, "RetrofitError: " + retrofitError.getKind());
-                            Log.e(TAG, "RetrofitError details: " + retrofitError.getUrl() + ", repsonse = " + retrofitError.getResponse());
+                            Log.e(TAG, "RetrofitError. TYPE:" + retrofitError.getKind() + " URL: " + retrofitError.getUrl());
                         }
                     });
                 }
