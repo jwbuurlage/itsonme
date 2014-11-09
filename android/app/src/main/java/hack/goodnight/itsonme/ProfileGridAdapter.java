@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import java.util.List;
 
 
@@ -30,7 +32,7 @@ class ProfileGridAdapter extends ArrayAdapter<String> {
         View rowView = inflater.inflate(R.layout.profileimage, null, true);
 
         ImageView imgView = (ImageView) rowView.findViewById(R.id.img);
-        new ImageDownloader(imgView).execute(web.get(position));
+        ImageLoader.getInstance().displayImage(web.get(position), imgView);
 
         return rowView;
     }
