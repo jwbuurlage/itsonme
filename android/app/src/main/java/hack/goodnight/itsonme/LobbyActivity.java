@@ -101,6 +101,8 @@ class EveningJoined
     Group g;
     EveningJoined(Group _g){ g = _g; }
 }
+class RetryLoginEvent{
+}
 
 public class LobbyActivity extends Activity {
     private static final String TAG = "ITSONME_LobbyActivity";
@@ -118,6 +120,7 @@ public class LobbyActivity extends Activity {
         but.bringToFront();
         but.setVisibility(View.GONE);
         findViewById(R.id.loadingBar).setVisibility(View.VISIBLE);
+        Log.i(TAG, "onCreate");
         onLaunch();
     }
 
@@ -125,6 +128,18 @@ public class LobbyActivity extends Activity {
     protected void onDestroy(){
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume!!!");
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent){
+        super.onNewIntent(intent);
+        Log.i(TAG, "onNewIntent!!");
     }
 
     @Override
@@ -179,10 +194,14 @@ public class LobbyActivity extends Activity {
             }
             @Override
             public void failure(RetrofitError retrofitError) {
-                findViewById(R.id.loadingBar).setVisibility(View.GONE);
                 Log.e(TAG, "RetrofitError. TYPE:" + retrofitError.getKind() + " URL: " + retrofitError.getUrl());
+                EventBus.getDefault().post(new RetryLoginEvent());
             }
         });
+    }
+
+    public void onEventMainThread(RetryLoginEvent event) {
+        onLaunch();
     }
 
     public void onEventMainThread(LoggedInServer event) {
