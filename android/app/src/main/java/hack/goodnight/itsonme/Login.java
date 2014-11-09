@@ -64,6 +64,7 @@ public class Login extends FragmentActivity {
         }
         //setContentView(R.layout.activity_login);
 
+        lobbyOpened = false;
         Log.i(TAG, "onCreate!!!");
 
         context = getApplicationContext();
@@ -96,6 +97,7 @@ public class Login extends FragmentActivity {
         super.onResume();
 
         Log.i(TAG, "onResume!!!");
+        lobbyOpened = false;
 
         // Logs 'install' and 'app activate' App Events.
         AppEventsLogger.activateApp(this);
@@ -111,12 +113,15 @@ public class Login extends FragmentActivity {
         AppEventsLogger.deactivateApp(this);
     }
 
+    private boolean lobbyOpened = false;
     public void openLobby()
     {
-        Intent intent;
-        intent = new Intent(this, LobbyActivity.class);
-        startActivity(intent);
-        this.finish();
+        if(!lobbyOpened) {
+            lobbyOpened = true;
+            Intent intent = new Intent(this, LobbyActivity.class);
+            startActivity(intent);
+            this.finish();
+        }
     }
 
     // Everything below is copied from
