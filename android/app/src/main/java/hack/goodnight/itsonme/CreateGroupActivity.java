@@ -31,6 +31,11 @@ public class CreateGroupActivity extends Activity {
         setContentView(R.layout.activity_create_group);
 
         TextView groupNameTextView = (TextView)findViewById(R.id.groupNameText);
+        if(Root.getInstance().user != null && !Root.getInstance().user.first_name.isEmpty())
+            groupNameTextView.setText(Root.getInstance().user.first_name + "'s Group");
+        else
+            groupNameTextView.setText("My Drinking Group");
+
         if(groupNameTextView.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
