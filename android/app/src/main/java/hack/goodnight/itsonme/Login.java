@@ -45,8 +45,8 @@ public class Login extends FragmentActivity {
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
-        boolean result = false;
-        if(intent.getBooleanExtra("logout", result) && result){
+        if(intent.getBooleanExtra("logout", false)){
+            Log.i(TAG,"facebook logout intent");
             Session.getActiveSession().closeAndClearTokenInformation();
         }
 
@@ -121,6 +121,7 @@ public class Login extends FragmentActivity {
         Intent intent;
         intent = new Intent(this, LobbyActivity.class);
         startActivity(intent);
+        this.finish();
     }
 
     // Everything below is copied from
