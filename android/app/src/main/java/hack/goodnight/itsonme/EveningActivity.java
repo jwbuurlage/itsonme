@@ -3,6 +3,7 @@ package hack.goodnight.itsonme;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
@@ -33,6 +35,20 @@ public class EveningActivity extends Activity {
     private boolean isDrinking;
     private boolean isReady;
 
+    Handler timerHandler = new Handler();
+
+    Runnable timerRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+            if( Root.getInstance().currentGroup != null && !Root.getInstance().currentGroup.rounds.isEmpty() ) {
+                List<Round> rounds = Root.getInstance().currentGroup.rounds;
+                setLabels(rounds.get(rounds.size()-1));
+            }
+            timerHandler.postDelayed(this, 30000);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +56,7 @@ public class EveningActivity extends Activity {
 
         Log.i(TAG, "onCreate!!!");
 
+        findViewById(R.id.statusPanel).setVisibility(View.GONE);
         isDrinking = true;
 
         EventBus.getDefault().register(this);
@@ -52,6 +69,9 @@ public class EveningActivity extends Activity {
         for(Participation p : Root.getInstance().currentGroup.participations) {
             a.add(p.user);
         }
+
+        timerHandler.postDelayed(timerRunnable, 0);
+
         EventBus.getDefault().post(new GroupUpdate(Root.getInstance().currentGroup));
 
         ProfileGridAdapter adapter = new ProfileGridAdapter(this, a);
@@ -153,11 +173,48 @@ public class EveningActivity extends Activity {
         });
     }
 
+    public void setLabels(Round round){
+        findViewById(R.id.statusPanel).setVisibility(View.VISIBLE);
+
+        TextView buyerText = (TextView) findViewById(R.id.roundTextView);
+        buyerText.setText(round.buyer.first_name+"'s Round");
+
+        long diff = (new Date()).getTime()- round.created_at.date.getTime();
+        TextView timerText = (TextView) findViewById(R.id.timeTextView);
+
+        int minutes=(int)Math.floor(diff/(60000));
+        String moment;
+        if(minutes == 0) {
+            moment = "just now";
+        } else if(minutes == 1) {
+            moment = "one minute ago";
+        } else if(minutes < 14) {
+            moment = minutes+" minutes ago";
+        } else if(minutes < 23) {
+            moment = "a quarter of an hour ago";
+        } else if(minutes < 50) {
+            moment = "half an hour ago";
+        } else {
+            int hours=(int)Math.floor((minutes+15)/60);
+            if(hours == 1)
+                moment = "one hour ago";
+            else
+                moment = hours+" hour ago";
+            if(hours > 24*365*1000000000*5)
+                moment = "You are from the future!";
+        }
+
+        timerText.setText(moment);
+
+        TextView AclText = (TextView) findViewById(R.id.nAlcTextView);
+        TextView NAclText = (TextView) findViewById(R.id.nNAlcTextView);
+        AclText.setText(""+round.n_alcoholic);
+        NAclText.setText(""+round.n_non_alcoholic);
+    }
+
     public void onEventMainThread(GroupUpdate event) {
         Group g = event.g;
         Root.getInstance().currentGroup = g;
-
-        //update UI
 
         //enable ready button again
         isReady = false;
@@ -166,17 +223,9 @@ public class EveningActivity extends Activity {
         //set round information
         if(!g.rounds.isEmpty()) {
             Round round = g.rounds.get(g.rounds.size()-1);
-            TextView buyerText = (TextView) findViewById(R.id.roundTextView);
-            buyerText.setText(round.buyer.first_name+"'s Round");
-
-            TextView timerText = (TextView) findViewById(R.id.timeTextView);
-            timerText.setText("0 minutes ago");
-
-            TextView AclText = (TextView) findViewById(R.id.nAlcTextView);
-            TextView NAclText = (TextView) findViewById(R.id.nNAlcTextView);
-            AclText.setText(""+round.n_alcoholic);
-            NAclText.setText(""+round.n_non_alcoholic);
-        }
+            setLabels(round);
+        }else
+            findViewById(R.id.statusPanel).setVisibility(View.GONE);
     }
 
     public void leaveGroup() {
