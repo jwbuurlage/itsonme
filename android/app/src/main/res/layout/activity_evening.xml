@@ -101,8 +101,8 @@ K
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="75dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="# drinks"
-            android:textSize="10dp"
+            android:text="drinks"
+            android:textSize="15dp"
             android:id="@+id/nAlcTextTitle"
             android:layout_centerHorizontal="true"
             android:textColor="@color/black_text"/>
@@ -114,8 +114,8 @@ K
             android:layout_alignParentRight="true"
             android:layout_marginRight="75dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="# sodas"
-            android:textSize="10dp"
+            android:text="sodas"
+            android:textSize="15dp"
             android:id="@+id/nNAlcTextTitle"
             android:layout_centerHorizontal="true"
             android:textColor="@color/black_text"/>
