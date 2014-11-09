@@ -62,14 +62,13 @@ public class CreateGroupActivity extends Activity {
         Root.getInstance().currentGroup = event.g;
         Intent intent = new Intent(this, EveningActivity.class);
         startActivity(intent);
+        this.finish();
     }
 
     public void startGroup(View v)
     {
         TextView groupTextView = (TextView)findViewById(R.id.groupNameText);
         String groupName = groupTextView.getText().toString();
-
-        final Intent intent = new Intent(this, EveningActivity.class);
 
         ServerInterface service = Root.getInstance().getService();
         service.createGroup(groupName, new retrofit.Callback<Group>() {
