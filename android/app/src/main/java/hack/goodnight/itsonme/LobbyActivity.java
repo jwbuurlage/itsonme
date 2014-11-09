@@ -93,6 +93,18 @@ class GroupListAdapter extends ArrayAdapter<Group>{
 
         return rowView;
     }
+
+    @Override
+    public boolean areAllItemsEnabled()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled(int arg0)
+    {
+        return true;
+    }
 }
 
 public class LobbyActivity extends Activity {
@@ -164,7 +176,6 @@ public class LobbyActivity extends Activity {
         final ListView lv = (ListView)findViewById(R.id.list_view_groups);
         GroupListAdapter adapter = new GroupListAdapter(this, groupList);
         lv.setAdapter(adapter);
-
         final Intent intent = new Intent(this, EveningActivity.class);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {

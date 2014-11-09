@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- For honeycomb and up -->
 <resources>
-    <style name="MyCustomTheme" parent="@android:style/Theme.Holo.Light">
-        <item name="android:actionBarStyle">@style/MyActionBarTheme</item>
-        <item name="android:titleTextStyle">@style/MyTextStyle</item>
-        <item name="android:actionMenuTextColor">#ffffff</item>
+    <color name="main_red">#8f320e</color>
+    <color name="main_redder">#aa2200</color>
+    <color name="main_text">#f5f0fe</color>
+    <color name="black_text">#351104</color>
+    <color name="skin_color">#e2c5bb</color>
+
+    <style name="IOMTheme" parent="@android:style/Theme.Holo.Light">
+        <item name="android:actionBarStyle">@style/IOMTheme.ActionBar</item>
+        <item name="android:actionMenuTextColor">@color/main_text</item>
     </style>
 
-    <style name="MyActionBarTheme" parent="@android:style/Widget.Holo.Light.ActionBar">
-        <item name="android:background">#bb3300</item>
-        <item name="android:displayOptions">showHome|homeAsUp|showTitle</item>
-        <item name="displayOptions">showHome|homeAsUp|showTitle</item>
-        <item name="android:icon">@android:color/transparent</item>
+    <style name="IOMTheme.ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@color/main_red</item>
+        <item name="android:titleTextStyle">@style/IOMTheme.ActionBar.Text</item>
     </style>
 
-    <style name="MyTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:actionMenuTextColor">#ffffff</item>
+    <style name="IOMTheme.ActionBar.Text" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/main_text</item>
     </style>
 
 </resources>

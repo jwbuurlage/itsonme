@@ -2,13 +2,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="hack.goodnight.itsonme.LobbyActivity">
+    android:padding="10dp"
+    tools:context="hack.goodnight.itsonme.LobbyActivity"
+    android:background="@drawable/background">
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/list_view_groups"
-        android:background="#ffffff"></ListView>
+        android:divider="#00000000"
+        android:dividerHeight="15dp"
+        android:background="#ffffff"
+        ></ListView>
 
     <ImageButton
         android:layout_width="50dp"
@@ -19,7 +24,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
         android:visibility="visible"
-        android:background="@drawable/com_facebook_close"
+        android:background="@drawable/ic_launcher"
         android:clickable="true"
         android:onClick="createGroup" />
 

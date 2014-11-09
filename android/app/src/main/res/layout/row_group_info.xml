@@ -1,32 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:descendantFocusability="blocksDescendants" >
+    android:layout_height="200dp"
+    android:background="@color/skin_color"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
-    <TableRow
+    <TextView
+        android:id="@+id/txt"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:gravity="center_horizontal"
+        android:textSize="25dp"
+        android:padding="10dp"
+        android:textColor="@color/black_text"
+        android:fontFamily="Roboto Light"
+        android:layout_alignParentTop="true"
         android:focusable="false"
-        android:focusableInTouchMode="false">
+        android:focusableInTouchMode="false"/>
 
-        <GridView
-            android:id="@+id/img"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:horizontalSpacing="10dp"
-            android:verticalSpacing="10dp"
-            android:padding="10dp"
-            android:numColumns="2"
-            android:focusable="false"
-            android:focusableInTouchMode="false"/>
+    <GridView
+        android:id="@+id/img"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:horizontalSpacing="10dp"
+        android:verticalSpacing="10dp"
+        android:padding="10dp"
+        android:numColumns="5"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
 
-        <TextView
-            android:id="@+id/txt"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:gravity="center_vertical"
-            android:textSize="20dp"
-            android:layout_marginLeft="20dp"
-            android:focusable="false"
-            android:focusableInTouchMode="false"/>
-    </TableRow>
-</TableLayout>
+    <View
+        android:id="@+id/touchview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
+</RelativeLayout>
