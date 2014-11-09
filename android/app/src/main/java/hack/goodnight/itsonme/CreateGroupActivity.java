@@ -34,6 +34,14 @@ public class CreateGroupActivity extends Activity {
         if(groupNameTextView.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -62,7 +70,6 @@ public class CreateGroupActivity extends Activity {
         Root.getInstance().currentGroup = event.g;
         Intent intent = new Intent(this, EveningActivity.class);
         startActivity(intent);
-        this.finish();
     }
 
     public void startGroup(View v)
