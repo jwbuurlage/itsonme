@@ -3,6 +3,7 @@ package hack.goodnight.itsonme;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -82,6 +83,9 @@ public class GcmIntentService extends IntentService {
                         .setContentText(msg);
 
         mBuilder.setContentIntent(contentIntent);
-        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        Notification notif = mBuilder.build();
+        notif.defaults = Notification.DEFAULT_SOUND;
+        notif.defaults = Notification.DEFAULT_VIBRATE;
+        mNotificationManager.notify(NOTIFICATION_ID, notif);
     }
 }

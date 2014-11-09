@@ -82,19 +82,16 @@ public class EveningActivity extends Activity {
         setTitle(Root.getInstance().currentGroup.name);
 
         GridView gridView = (GridView)findViewById(R.id.gridView);
-
         List<User> a = new ArrayList<User>();
         for(Participation p : Root.getInstance().currentGroup.participations) {
             a.add(p.user);
         }
+        ProfileGridAdapter adapter = new ProfileGridAdapter(this, a);
+        gridView.setAdapter(adapter);
 
         timerHandler.postDelayed(timerRunnable, 0);
 
         EventBus.getDefault().post(new GroupUpdate(Root.getInstance().currentGroup));
-
-        ProfileGridAdapter adapter = new ProfileGridAdapter(this, a);
-        gridView.setAdapter(adapter);
-
         updateGroup();
     }
 
@@ -250,9 +247,16 @@ public class EveningActivity extends Activity {
         Group g = event.g;
         Root.getInstance().currentGroup = g;
 
-        //enable ready button again
-        isReady = false;
-        findViewById(R.id.readyButton).setAlpha(0.5f);
+        isReady = g.my_participation.is_ready;
+        if(!isReady) findViewById(R.id.readyButton).setAlpha(0.5f);
+
+        GridView gridView = (GridView)findViewById(R.id.gridView);
+        List<User> a = new ArrayList<User>();
+        for(Participation p : Root.getInstance().currentGroup.participations) {
+            a.add(p.user);
+        }
+        ProfileGridAdapter adapter = new ProfileGridAdapter(this, a);
+        gridView.setAdapter(adapter);
 
         //set round information
         if(!g.rounds.isEmpty()) {
