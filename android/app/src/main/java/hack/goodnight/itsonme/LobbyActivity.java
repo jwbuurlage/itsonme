@@ -33,31 +33,6 @@ import de.greenrobot.event.EventBus;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
-    ImageView bmImage;
-
-    public ImageDownloader(ImageView bmImage) {
-        this.bmImage = bmImage;
-    }
-
-    protected Bitmap doInBackground(String... urls) {
-        String url = urls[0];
-        Bitmap mIcon = null;
-        try {
-            InputStream in = new java.net.URL(url).openStream();
-            mIcon = BitmapFactory.decodeStream(in);
-        } catch (Exception e) {
-            Log.e("Error", e.getMessage());
-        }
-        mIcon = ImageHelper.getRoundedCornerBitmap(mIcon, mIcon.getHeight() / 2);
-        return mIcon;
-    }
-
-    protected void onPostExecute(Bitmap result) {
-        bmImage.setImageBitmap(result);
-    }
-}
-
 class GroupListAdapter extends ArrayAdapter<Group>{
     private final Activity context;
     private final List<Group> web;

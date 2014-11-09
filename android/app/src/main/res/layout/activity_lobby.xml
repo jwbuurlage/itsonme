@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
     tools:context="hack.goodnight.itsonme.LobbyActivity"
     android:background="@drawable/background">
 
@@ -12,13 +11,14 @@
         android:id="@+id/list_view_groups"
         android:divider="#00000000"
         android:dividerHeight="15dp"
+        android:padding="10dp"
         ></ListView>
 
-<!--    <ImageView
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="140dp"
         android:background="@drawable/shadow"
-        android:layout_alignParentBottom="true" /> -->
+        android:layout_alignParentBottom="true" />
 
     <ImageButton
         android:layout_width="70dp"

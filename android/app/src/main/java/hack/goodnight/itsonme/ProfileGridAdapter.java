@@ -32,7 +32,7 @@ class ProfileGridAdapter extends ArrayAdapter<User> {
         View rowView = inflater.inflate(R.layout.profileimage, null, true);
 
         ImageView iv = (ImageView) rowView.findViewById(R.id.img);
-        Picasso.with(context).load(web.get(position).facebook_avatar_url).into(iv);
+        Picasso.with(context).load(web.get(position).facebook_avatar_url).transform(new CircleTransform()).into(iv);
 
         return rowView;
     }
