@@ -99,9 +99,7 @@ public class EveningActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }else if(id == R.id.action_leave) {
+        if(id == R.id.action_leave) {
             leaveGroup();
             return true;
         }
