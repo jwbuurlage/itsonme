@@ -116,8 +116,9 @@ public class LobbyActivity extends Activity {
         EventBus.getDefault().register(this);
         ImageButton but = (ImageButton)findViewById(R.id.createGroupButton);
         but.bringToFront();
-
-        onLaunch(); //TODO: should this happen at onCreate or at other variants. only when savedInstanceState == null ?
+        but.setVisibility(View.GONE);
+        findViewById(R.id.loadingBar).setVisibility(View.VISIBLE);
+        onLaunch();
     }
 
     @Override
@@ -168,10 +169,7 @@ public class LobbyActivity extends Activity {
         // - request current group
         // - if in a group, go to evening activity
         // - if not, show group list (this activity)
-
         isInGroup = false;
-        findViewById(R.id.createGroupButton).setVisibility(View.GONE);
-        findViewById(R.id.loadingBar).setVisibility(View.VISIBLE);
 
         ServerInterface service = Root.getInstance().getService();
         service.login(Root.getInstance().auth_token, new retrofit.Callback<User>() {
