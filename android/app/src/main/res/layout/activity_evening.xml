@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="hack.goodnight.itsonme.EveningActivity"
-    android:id="@+id/rel_layout_evening">
+    android:id="@+id/rel_layout_evening"
+    android:background="@drawable/background">
 
     <ImageButton
         android:layout_width="70dp"

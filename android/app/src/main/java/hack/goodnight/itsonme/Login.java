@@ -16,8 +16,6 @@ import android.view.View;
 
 import com.facebook.AppEventsLogger;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -63,11 +61,6 @@ public class Login extends FragmentActivity {
         regid = getRegistrationId(context);
         Root.getInstance().gcmRegId = regid; //also on empty string
         if (regid.isEmpty()) registerInBackground();
-
-        // Create global configuration and initialize ImageLoader with this config
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
-        ImageLoader.getInstance().init(config);
-
     }
 
 

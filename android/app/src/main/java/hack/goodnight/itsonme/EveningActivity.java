@@ -36,10 +36,9 @@ public class EveningActivity extends Activity {
 
         GridView gridView = (GridView)findViewById(R.id.gridView);
 
-        List<String> a = new ArrayList<String>();
+        List<User> a = new ArrayList<User>();
         for(Participation p : Root.getInstance().currentGroup.participations) {
-            a.add(p.user.facebook_avatar_url);
-            Log.i("Found user: ", a.get(a.size() - 1));
+            a.add(p.user);
         }
 
         ProfileGridAdapter adapter = new ProfileGridAdapter(this, a);
@@ -95,7 +94,7 @@ public class EveningActivity extends Activity {
         service.updateParticipation(partId, isDrinking, isReady, new retrofit.Callback<Group>() {
             @Override
             public void success(Group updatedGroup, Response response) {
-                Root.getInstance().currentGroup = updatedGroup;2
+                Root.getInstance().currentGroup = updatedGroup;
                 Log.i(TAG, "readystatus update sent succesfully. updated group received.");
             }
 

@@ -79,10 +79,9 @@ class GroupListAdapter extends ArrayAdapter<Group>{
 
         GridView imageView = (GridView) rowView.findViewById(R.id.img);
 
-        List<String> a = new ArrayList<String>();
+        List<User> a = new ArrayList<User>();
         for(Participation p : web.get(position).participations) {
-            a.add(p.user.facebook_avatar_url);
-            Log.i("Found user: ", a.get(a.size() -1));
+            a.add(p.user);
         }
 
         ProfileGridAdapter adapter = new ProfileGridAdapter((Activity)this.getContext(), a);

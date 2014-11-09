@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -15,12 +15,12 @@ import java.util.List;
 /**
  * Created by jw on 8-11-14.
  */
-class ProfileGridAdapter extends ArrayAdapter<String> {
+class ProfileGridAdapter extends ArrayAdapter<User> {
     private final Activity context;
-    private final List<String> web;
+    private final List<User> web;
 
     public ProfileGridAdapter(Activity context,
-                              List<String> web) {
+                              List<User> web) {
         super(context, R.layout.profileimage, web);
         this.context = context;
         this.web = web;
@@ -31,8 +31,8 @@ class ProfileGridAdapter extends ArrayAdapter<String> {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView = inflater.inflate(R.layout.profileimage, null, true);
 
-        ImageView imgView = (ImageView) rowView.findViewById(R.id.img);
-        ImageLoader.getInstance().displayImage(web.get(position), imgView);
+        ImageView iv = (ImageView) rowView.findViewById(R.id.img);
+        Picasso.with(context).load(web.get(position).facebook_avatar_url).into(iv);
 
         return rowView;
     }
