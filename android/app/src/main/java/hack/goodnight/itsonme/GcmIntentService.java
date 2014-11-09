@@ -8,6 +8,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
@@ -87,5 +88,9 @@ public class GcmIntentService extends IntentService {
         notif.defaults = Notification.DEFAULT_SOUND;
         notif.defaults = Notification.DEFAULT_VIBRATE;
         mNotificationManager.notify(NOTIFICATION_ID, notif);
+
+
+        MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.sound);
+        mp.start();
     }
 }
