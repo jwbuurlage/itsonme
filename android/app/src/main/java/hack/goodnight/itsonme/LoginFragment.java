@@ -19,7 +19,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class LoginFragment extends Fragment {
-    private static final String TAG = "LoginFragment";
+    private static final String TAG = "ITSONME_LoginFragment";
     private UiLifecycleHelper uiHelper;
     private View view;
 
@@ -60,24 +60,6 @@ public class LoginFragment extends Fragment {
             //If it is not the second login
             if(session.getAccessToken() != Root.getInstance().auth_token) {
                 Root.getInstance().auth_token = session.getAccessToken();
-
-                //This is not completely legit because of concurrency issues
-                if(Root.getInstance().gcmRegId.isEmpty() == false) {
-                    ServerInterface service = Root.getInstance().getService();
-                    service.sendPushToken(Root.getInstance().gcmRegId, new retrofit.Callback<User>() {
-                        @Override
-                        public void success(User user, Response response) {
-                            Root.getInstance().setUser(user);
-                            Log.i(TAG, "Sent GoogleCloudMessaging regid to server.");
-                        }
-
-                        @Override
-                        public void failure(RetrofitError retrofitError) {
-                            Log.e(TAG, "RetrofitError: " + retrofitError.getKind());
-                            Log.e(TAG, "RetrofitError details: " + retrofitError.getUrl() + ", repsonse = " + retrofitError.getResponse());
-                        }
-                    });
-                }
                 Root.getInstance().loggedInFacebook = true;
 
                 view.findViewById(R.id.loadingBar).setVisibility(View.VISIBLE);
@@ -88,7 +70,6 @@ public class LoginFragment extends Fragment {
                     public void success(User user, Response response) {
                         Root.getInstance().setUser(user);
                         Log.i(TAG, "User info: " + user.first_name);
-
                         Login activ = (Login)getActivity();
                         activ.openLobby(view);
                         view.findViewById(R.id.loadingBar).setVisibility(View.GONE);
