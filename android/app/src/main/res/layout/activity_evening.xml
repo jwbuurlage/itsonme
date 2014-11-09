@@ -5,22 +5,22 @@
     android:id="@+id/rel_layout_evening">
 
     <ImageButton
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:id="@+id/createGroupButton"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
         android:visibility="visible"
-        android:background="@drawable/com_facebook_button_check_on"
+        android:background="@drawable/vinkje"
         android:clickable="true"
         android:onClick="iAmReadyClicked"
         android:layout_alignParentStart="false" />
 
     <GridView
         android:layout_width="fill_parent"
-        android:layout_height="60dp"
+        android:layout_height="100dp"
         android:id="@+id/gridView"
         android:layout_alignParentTop="true"
         android:layout_toStartOf="@+id/createGroupButton"
@@ -29,7 +29,7 @@
         android:verticalSpacing="10dp"
         android:padding="10dp"
         android:layout_alignParentEnd="true"
-        android:numColumns="auto_fit" />
+        android:numColumns="6" />
 
     <TextView
         android:layout_width="wrap_content"
