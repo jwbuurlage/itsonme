@@ -1,8 +1,10 @@
 package hack.goodnight.itsonme;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,6 +26,8 @@ import de.greenrobot.event.EventBus;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import static android.app.AlertDialog.*;
+
 class LeftGroup{
 }
 class GroupUpdate
@@ -37,6 +41,7 @@ public class EveningActivity extends Activity {
 
     private boolean isDrinking;
     private boolean isReady;
+    private boolean hasBeenAsked = false;
 
     Handler timerHandler = new Handler();
 
@@ -56,6 +61,8 @@ public class EveningActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_evening);
+
+
 
         Log.i(TAG, "onCreate!!!");
 
@@ -93,6 +100,8 @@ public class EveningActivity extends Activity {
 
         EventBus.getDefault().post(new GroupUpdate(Root.getInstance().currentGroup));
         updateGroup();
+
+
     }
 
     @Override
@@ -260,7 +269,38 @@ public class EveningActivity extends Activity {
 
         //set round information
         if(!g.rounds.isEmpty()) {
-            Round round = g.rounds.get(g.rounds.size()-1);
+            final Round round = g.rounds.get(g.rounds.size()-1);
+
+            if (!this.hasBeenAsked) {
+                int n_alcoholics = 0;
+                for (Participation p : g.participations) {
+                    if (p.is_drinking_alcohol) n_alcoholics++;
+                }
+                final int m_alcoholics = n_alcoholics;
+                if (round.n_alcoholic == 0 && n_alcoholics > 0) {
+                    Builder builder = new Builder(this);
+                    builder.setTitle("Message from the bar");
+                    builder.setMessage("Would you consider buying a round of non-alcoholic drinks for 20% off?");
+                    // Add the buttons
+                    builder.setPositiveButton("Okay!", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // nothing happens
+                        }
+                    });
+                    builder.setNegativeButton("Maybe the next round.", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            round.n_alcoholic += m_alcoholics;
+                            round.n_non_alcoholic -= m_alcoholics;
+                            setLabels(round);
+                        }
+                    });
+
+                    // Create the AlertDialog
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    this.hasBeenAsked = true;
+                }
+            }
             setLabels(round);
         }else
             findViewById(R.id.statusPanel).setVisibility(View.GONE);

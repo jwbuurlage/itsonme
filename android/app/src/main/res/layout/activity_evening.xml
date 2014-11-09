@@ -6,41 +6,46 @@
     android:background="@drawable/background"
     android:padding="20dp">
 
-    <ImageButton
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:id="@+id/readyButton"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
-        android:visibility="visible"
-        android:background="@drawable/vinkje"
-        android:clickable="true"
-        android:onClick="iAmReadyClicked"
-        android:layout_alignParentStart="false" />
-
-    <GridView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="70dp"
-        android:id="@+id/gridView"
-        android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/createGroupButton"
-        android:layout_alignParentRight="true"
-        android:horizontalSpacing="10dp"
-        android:verticalSpacing="10dp"
-        android:padding="10dp"
-        android:layout_alignParentEnd="true"
-        android:numColumns="auto_fit"
-        android:columnWidth="50dp"
-        android:background="@drawable/patternrepeat"/>
+        android:layout_height="90dp"
+        android:id="@+id/linearLayout"
+        android:background="@drawable/patternrepeat">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="WHO'S IN THE GROUP?"
+            android:layout_marginTop="5dp"
+            android:id="@+id/textView3"
+            android:layout_alignParentTop="true"
+            android:gravity="center_horizontal"
+            android:textColor="@color/black_text"
+            android:fontFamily="sans-serif-light"
+            />
+
+        <GridView
+            android:layout_width="fill_parent"
+            android:layout_height="70dp"
+            android:id="@+id/gridView"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/createGroupButton"
+            android:layout_alignParentRight="true"
+            android:horizontalSpacing="10dp"
+            android:verticalSpacing="10dp"
+            android:padding="10dp"
+            android:layout_alignParentEnd="true"
+            android:numColumns="auto_fit"
+            android:columnWidth="50dp"/>
+    </LinearLayout >
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:paddingTop="20dp"
+        android:paddingTop="5dp"
         android:paddingBottom="30dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/gridView"
+        android:layout_below="@+id/linearLayout"
         android:layout_marginTop="20dp"
         android:id="@+id/statusPanel"
         android:background="@drawable/patternrepeat">
@@ -52,6 +57,7 @@
             android:text="John&apos;s Round"
             android:id="@+id/roundTextView"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
             android:fontFamily="sans-serif-light"
             android:textColor="@color/black_text"/>
 K
@@ -99,9 +105,9 @@ K
             android:layout_height="wrap_content"
             android:layout_below="@+id/nAlcTextView"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="75dp"
+            android:layout_marginLeft="65dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="drinks"
+            android:text="alcoholic"
             android:textSize="15dp"
             android:id="@+id/nAlcTextTitle"
             android:layout_centerHorizontal="true"
@@ -112,17 +118,39 @@ K
             android:layout_height="wrap_content"
             android:layout_below="@+id/nAlcTextView"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="75dp"
+            android:layout_marginRight="82dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="sodas"
+            android:text="soft"
             android:textSize="15dp"
             android:id="@+id/nNAlcTextTitle"
             android:layout_centerHorizontal="true"
             android:textColor="@color/black_text"/>
 
-        </RelativeLayout>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="WHO&apos;S BUYING NEXT?"
+            android:id="@+id/textView2"
+            android:layout_alignParentTop="true"
+            android:gravity="center_horizontal"
+            android:textColor="@color/black_text"
+            android:fontFamily="sans-serif-light"
+            />
+    </RelativeLayout>
 
-
+    <ImageButton
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:id="@+id/readyButton"
+        android:visibility="visible"
+        android:background="@drawable/vinkje"
+        android:clickable="true"
+        android:onClick="iAmReadyClicked"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="0dp"
+        android:layout_marginBottom="0dp"/>
 
     <ToggleButton
         android:layout_width="152dp"
@@ -130,12 +158,37 @@ K
         android:text="New ToggleButton"
         android:id="@+id/toggleButton"
         android:onClick="noMoreAlcoholClicked"
-        android:layout_marginBottom="10dp"
         android:background="@drawable/sw"
         android:textOn=""
         android:textOff=""
+        android:layout_above="@+id/readyButton"
+        android:layout_alignRight="@+id/statusPanel"
+        android:layout_alignEnd="@+id/statusPanel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="READY FOR THE NEXT DRINK?"
+        android:id="@+id/textView"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="0dp" />
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="10dp"
+        android:textColor="#ffffff"
+        android:fontFamily="sans-serif-light" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="DRINKING ALCOHOL?"
+        android:id="@+id/textView4"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="100dp"
+        android:layout_marginLeft="10dp"
+        android:textColor="#ffffff"
+        android:fontFamily="sans-serif-light" />
 
 </RelativeLayout>
