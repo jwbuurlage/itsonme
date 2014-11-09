@@ -162,8 +162,7 @@ K
         android:textOn=""
         android:textOff=""
         android:layout_above="@+id/readyButton"
-        android:layout_alignRight="@+id/statusPanel"
-        android:layout_alignEnd="@+id/statusPanel" />
+        android:layout_alignRight="@+id/linearLayout"/>
 
     <TextView
         android:layout_width="wrap_content"
