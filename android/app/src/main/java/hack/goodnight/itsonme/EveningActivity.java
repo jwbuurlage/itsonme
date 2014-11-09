@@ -81,7 +81,16 @@ public class EveningActivity extends Activity {
 
     public void updateGroup() {
         ServerInterface service = Root.getInstance().getService();
-        service.updateParticipation(Root.getInstance().currentGroup.id, isDrinking, isReady, new retrofit.Callback<Group>() {
+
+        int partId = -1;
+        for(Participation part : Root.getInstance().currentGroup.participations){
+            if( part.user.id == Root.getInstance().getUser().id ){
+                partId = part.id;
+                break;
+            }
+        }
+
+        service.updateParticipation(partId, isDrinking, isReady, new retrofit.Callback<Group>() {
             @Override
             public void success(Group updatedGroup, Response response) {
                 Log.i(TAG, "group updated.");
