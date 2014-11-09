@@ -8,6 +8,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -85,9 +86,12 @@ public class GcmIntentService extends IntentService {
 
         mBuilder.setContentIntent(contentIntent);
         Notification notif = mBuilder.build();
-        notif.sound = Uri.parse("android.resource://hack.goodnight.itsonme/raw/sound.mp3");
+//        notif.sound = Uri.parse("android.resource://hack.goodnight.itsonme/raw/sound.mp3");
         notif.defaults = Notification.DEFAULT_VIBRATE;
         mNotificationManager.notify(NOTIFICATION_ID, notif);
+
+        MediaPlayer mPlayer = MediaPlayer.create(this.getApplicationContext(), R.raw.sound);
+        mPlayer.start();
 
     }
 }
