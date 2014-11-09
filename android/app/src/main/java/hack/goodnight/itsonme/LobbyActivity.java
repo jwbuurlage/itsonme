@@ -223,7 +223,7 @@ public class LobbyActivity extends Activity {
         service.getCurrentGroup(new retrofit.Callback<Group>() {
             @Override
             public void success(Group group, Response response) {
-                EventBus.getDefault().post(new ReceivedCurrentGroup(group));
+                if( group != null ) EventBus.getDefault().post(new ReceivedCurrentGroup(group));
             }
             @Override
             public void failure(RetrofitError retrofitError) {
