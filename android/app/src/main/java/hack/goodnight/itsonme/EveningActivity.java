@@ -41,7 +41,6 @@ public class EveningActivity extends Activity {
         Log.i(TAG, "onCreate!!!");
 
         isDrinking = true;
-        isReady = false;
 
         EventBus.getDefault().register(this);
 
@@ -53,6 +52,7 @@ public class EveningActivity extends Activity {
         for(Participation p : Root.getInstance().currentGroup.participations) {
             a.add(p.user);
         }
+        EventBus.getDefault().post(new GroupUpdate(Root.getInstance().currentGroup));
 
         ProfileGridAdapter adapter = new ProfileGridAdapter(this, a);
         gridView.setAdapter(adapter);
@@ -97,9 +97,12 @@ public class EveningActivity extends Activity {
 
 
     public void iAmReadyClicked(View view) {
-        Log.i(TAG, "I Am Ready Clicked");
-        isReady = true;
-        updateGroup();
+        if(!isReady) {
+            Log.i(TAG, "I Am Ready Clicked");
+            isReady = true;
+            updateGroup();
+            findViewById(R.id.readyButton).setAlpha(1.0f);
+        }
     }
 
     public void updateGroup() {
@@ -151,11 +154,29 @@ public class EveningActivity extends Activity {
     }
 
     public void onEventMainThread(GroupUpdate event) {
+        Group g = event.g;
+        Root.getInstance().currentGroup = g;
+
         //update UI
 
-        //TODO
-        //TODO
-        //TODO
+        //enable ready button again
+        isReady = false;
+        findViewById(R.id.readyButton).setAlpha(0.5f);
+
+        //set round information
+        if(!g.rounds.isEmpty()) {
+            Round round = g.rounds.get(g.rounds.size()-1);
+            TextView buyerText = (TextView) findViewById(R.id.roundTextView);
+            buyerText.setText(round.buyer.first_name+"'s Round");
+
+            TextView timerText = (TextView) findViewById(R.id.timeTextView);
+            timerText.setText("0 minutes ago");
+
+            TextView AclText = (TextView) findViewById(R.id.nAlcTextView);
+            TextView NAclText = (TextView) findViewById(R.id.nNAlcTextView);
+            AclText.setText(""+round.n_alcoholic);
+            NAclText.setText(""+round.n_non_alcoholic);
+        }
     }
 
     public void leaveGroup() {

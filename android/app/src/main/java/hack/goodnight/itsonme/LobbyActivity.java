@@ -146,7 +146,7 @@ public class LobbyActivity extends Activity {
             return true;
         }else if(id == R.id.action_logout){
             Intent intent;
-            intent = new Intent(this, CreateGroupActivity.class);
+            intent = new Intent(this, Login.class);
             intent.putExtra("logout", true);
             startActivity(intent);
             this.finish();

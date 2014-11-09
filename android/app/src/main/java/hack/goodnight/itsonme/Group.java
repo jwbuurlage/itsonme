@@ -7,4 +7,5 @@ public class Group {
     public String name;
     public List<Participation> participations;
     public Participation my_participation;
+    public List<Round> rounds;
 }

@@ -9,7 +9,7 @@
     <ImageButton
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:id="@+id/createGroupButton"
+        android:id="@+id/readyButton"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
