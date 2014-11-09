@@ -101,17 +101,73 @@ class EveningJoined
 public class LobbyActivity extends Activity {
     private static final String TAG = "ITSONME_LobbyActivity";
 
-
     private List<Group> groupList;
     private Group currentGroupDummy; //only for debugging
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_lobby);
-
         EventBus.getDefault().register(this);
+        ImageButton but = (ImageButton)findViewById(R.id.createGroupButton);
+        but.bringToFront();
+
+        onLaunch(); //TODO: onCreate vs onIntent vs on opened from standby etc
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_lobby, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void createGroup(View v)
+    {
+        Intent intent;
+        intent = new Intent(this, CreateGroupActivity.class);
+        startActivity(intent);
+    }
+
+    public void onLaunch() {
+        ServerInterface service = Root.getInstance().getService();
+        service.login(Root.getInstance().auth_token, new retrofit.Callback<User>() {
+            @Override
+            public void success(User user, Response response) {
+                Root.getInstance().setUser(user);
+                Log.i(TAG, "User info: " + user.first_name);
+                view.findViewById(R.id.loadingBar).setVisibility(View.GONE);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                view.findViewById(R.id.loadingBar).setVisibility(View.GONE);
+                Log.e(TAG, "RetrofitError: " + retrofitError.getKind());
+                Log.e(TAG, "RetrofitError details: " + retrofitError.getUrl() + ", repsonse = " + retrofitError.getResponse());
+            }
+        });
+
 
         ServerInterface service = Root.getInstance().getService();
         service.getGroups(new retrofit.Callback<List<Group>>() {
@@ -149,45 +205,8 @@ public class LobbyActivity extends Activity {
                 Log.e(TAG, "RetrofitError details: " + retrofitError.getUrl() + ", repsonse = " + retrofitError.getResponse());
             }
         });
-
-        ImageButton but = (ImageButton)findViewById(R.id.createGroupButton);
-        but.bringToFront();
     }
 
-    @Override
-    protected void onDestroy(){
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_lobby, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void createGroup(View v)
-    {
-        Intent intent;
-        intent = new Intent(this, CreateGroupActivity.class);
-        startActivity(intent);
-    }
     public void onEventMainThread(GroupListChanged event) {
         groupList = event.list;
         Root.getInstance().groupList = event.list;

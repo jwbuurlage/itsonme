@@ -15,8 +15,10 @@ import com.facebook.widget.LoginButton;
 
 import java.util.Arrays;
 
+import de.greenrobot.event.EventBus;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+
 
 public class LoginFragment extends Fragment {
     private static final String TAG = "ITSONME_LoginFragment";
@@ -64,24 +66,8 @@ public class LoginFragment extends Fragment {
 
                 view.findViewById(R.id.loadingBar).setVisibility(View.VISIBLE);
 
-                ServerInterface service = Root.getInstance().getService();
-                service.login(Root.getInstance().auth_token, new retrofit.Callback<User>() {
-                    @Override
-                    public void success(User user, Response response) {
-                        Root.getInstance().setUser(user);
-                        Log.i(TAG, "User info: " + user.first_name);
-                        Login activ = (Login)getActivity();
-                        activ.openLobby(view);
-                        view.findViewById(R.id.loadingBar).setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void failure(RetrofitError retrofitError) {
-                        view.findViewById(R.id.loadingBar).setVisibility(View.GONE);
-                        Log.e(TAG, "RetrofitError: " + retrofitError.getKind());
-                        Log.e(TAG, "RetrofitError details: " + retrofitError.getUrl() + ", repsonse = " + retrofitError.getResponse());
-                    }
-                });
+                Login activ = (Login)getActivity();
+                activ.openLobby(view);
             }
 
         } else if (state.isClosed()) {
