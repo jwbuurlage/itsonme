@@ -142,9 +142,7 @@ public class LobbyActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }else if(id == R.id.action_logout){
+        if(id == R.id.action_logout){
             Intent intent;
             intent = new Intent(this, Login.class);
             intent.putExtra("logout", true);
