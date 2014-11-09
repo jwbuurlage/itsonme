@@ -129,6 +129,7 @@ K
         android:layout_height="70dp"
         android:text="New ToggleButton"
         android:id="@+id/toggleButton"
+        android:onClick="noMoreAlcoholClicked"
         android:layout_marginBottom="10dp"
         android:background="@drawable/sw"
         android:textOn=""

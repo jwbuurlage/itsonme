@@ -1,6 +1,8 @@
 package hack.goodnight.itsonme;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,6 +14,7 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -56,8 +59,23 @@ public class EveningActivity extends Activity {
 
         Log.i(TAG, "onCreate!!!");
 
+        Intent intent = getIntent();
+        if(intent.getBooleanExtra("notification", false)){
+            Log.e(TAG, "Received notification at onCreate!!");
+            NotificationManager mNotificationManager = (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.cancel(1);
+            if( Root.getInstance().currentGroup == null || Root.getInstance().currentGroup.id == 0){
+                Intent intent2 = new Intent(this, Login.class);
+                startActivity(intent2);
+                this.finish();
+                return;
+            }
+        }
+
         findViewById(R.id.statusPanel).setVisibility(View.GONE);
         isDrinking = true;
+        ToggleButton btn = (ToggleButton)findViewById(R.id.toggleButton);
+        btn.setChecked(isDrinking);
 
         EventBus.getDefault().register(this);
 
@@ -76,6 +94,24 @@ public class EveningActivity extends Activity {
 
         ProfileGridAdapter adapter = new ProfileGridAdapter(this, a);
         gridView.setAdapter(adapter);
+
+        updateGroup();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent){
+        super.onNewIntent(intent);
+        if(intent.getBooleanExtra("notification", false)){
+            Log.e(TAG, "Received notification at onNewIntent!!");
+            NotificationManager mNotificationManager = (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.cancel(1);
+            if( Root.getInstance().currentGroup == null || Root.getInstance().currentGroup.id == 0){
+                Intent intent2 = new Intent(this, Login.class);
+                startActivity(intent2);
+                this.finish();
+                return;
+            }
+        }
     }
 
     @Override
@@ -108,8 +144,8 @@ public class EveningActivity extends Activity {
     }
 
     public void noMoreAlcoholClicked(View view) {
-        //get toggle value from ui element
-        isDrinking = true;
+        ToggleButton btn = (ToggleButton)findViewById(R.id.toggleButton);
+        isDrinking = btn.isChecked();
         updateGroup();
     }
 

@@ -69,12 +69,15 @@ public class GcmIntentService extends IntentService {
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, EveningActivity.class), 0);
+        Intent intent = new Intent(this, EveningActivity.class);
+        intent.putExtra("notification", true);
+
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.com_facebook_button_like_icon)
-                        .setContentTitle("Its on.... YOU")
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setContentTitle("Its on me")
                         .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
                         .setContentText(msg);
 
