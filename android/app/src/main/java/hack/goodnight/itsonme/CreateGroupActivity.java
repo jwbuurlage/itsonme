@@ -12,9 +12,15 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+class CreateGroupEvent
+{
+    Group g;
+    CreateGroupEvent(Group _g) { g = _g; }
+}
 
 public class CreateGroupActivity extends Activity {
     private static final String TAG = "CreateGroupActivity";
@@ -52,6 +58,12 @@ public class CreateGroupActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void onEventMainThread(CreateGroupEvent event) {
+        Root.getInstance().currentGroup = event.g;
+        Intent intent = new Intent(this, EveningActivity.class);
+        startActivity(intent);
+    }
+
     public void startGroup(View v)
     {
         TextView groupTextView = (TextView)findViewById(R.id.groupNameText);
@@ -64,8 +76,7 @@ public class CreateGroupActivity extends Activity {
             @Override
             public void success(Group group, Response response) {
                 Log.i(TAG, "Server gave group.");
-                Root.getInstance().currentGroup = group;
-                startActivity(intent);
+                EventBus.getDefault().post(new CreateGroupEvent(group));
             }
 
             @Override

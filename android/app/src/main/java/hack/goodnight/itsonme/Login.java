@@ -24,7 +24,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class Login extends FragmentActivity {
-    private static final String TAG = "LoginActivity";
+    private static final String TAG = "ITSONME_LoginActivity";
     private LoginFragment loginFragment;
 
     String SENDER_ID = "697538693334"; //ItsOnMe unique code obtained from google account
@@ -229,7 +229,7 @@ public class Login extends FragmentActivity {
                 @Override
                 public void success(User user, Response response) {
                     Root.getInstance().setUser(user);
-                    Log.i(TAG, "Sent GoogleCloudMessaging regid to server.");
+                    Log.i(TAG, "Sent GoogleCloudMessaging regid to server (new registration).");
                 }
                 @Override
                 public void failure(RetrofitError retrofitError) {

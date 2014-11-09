@@ -19,7 +19,7 @@ import retrofit.client.Response;
 
 
 public class EveningActivity extends Activity {
-    private static final String TAG = "EveningActivity";
+    private static final String TAG = "ITSONME_EveningActivity";
 
     private boolean isDrinking;
     private boolean isReady;
@@ -74,14 +74,14 @@ public class EveningActivity extends Activity {
         updateGroup();
     }
 
+
     public void iAmReadyClicked(View view) {
+        Log.i(TAG, "I Am Ready Clicked");
         isReady = true;
         updateGroup();
     }
 
     public void updateGroup() {
-        ServerInterface service = Root.getInstance().getService();
-
         int partId = -1;
         for(Participation part : Root.getInstance().currentGroup.participations){
             if( part.user.id == Root.getInstance().getUser().id ){
@@ -89,11 +89,14 @@ public class EveningActivity extends Activity {
                 break;
             }
         }
+        Log.i(TAG, "Updating participation "+partId);
 
+        ServerInterface service = Root.getInstance().getService();
         service.updateParticipation(partId, isDrinking, isReady, new retrofit.Callback<Group>() {
             @Override
             public void success(Group updatedGroup, Response response) {
-                Log.i(TAG, "group updated.");
+                Root.getInstance().currentGroup = updatedGroup;2
+                Log.i(TAG, "readystatus update sent succesfully. updated group received.");
             }
 
             @Override

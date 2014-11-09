@@ -29,6 +29,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -107,11 +108,28 @@ class GroupListAdapter extends ArrayAdapter<Group>{
     }
 }
 
+class GroupListChanged
+{
+    List<Group> list;
+    GroupListChanged(List<Group> g) { list = g; }
+}
+class ReceivedCurrentGroup
+{
+    Group g;
+    ReceivedCurrentGroup(Group _g){ g = _g; }
+}
+class EveningJoined
+{
+    Group g;
+    EveningJoined(Group _g){ g = _g; }
+}
+
 public class LobbyActivity extends Activity {
-    private static final String TAG = "LobbyActivity";
+    private static final String TAG = "ITSONME_LobbyActivity";
 
 
     private List<Group> groupList;
+    private Group currentGroupDummy; //only for debugging
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,18 +137,38 @@ public class LobbyActivity extends Activity {
 
         setContentView(R.layout.activity_lobby);
 
+        EventBus.getDefault().register(this);
+
         ServerInterface service = Root.getInstance().getService();
         service.getGroups(new retrofit.Callback<List<Group>>() {
             @Override
             public void success(List<Group> list, Response response) {
-                Log.i(TAG, "Server gave grouplist.");
-                groupList = list;
-                for(Group group : groupList) {
-                    Log.i(TAG, "Group received: "+group.name);
-                }
-                makeTable();
+                EventBus.getDefault().post(new GroupListChanged(list));
             }
-
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.e(TAG, "RetrofitError: " + retrofitError.getKind());
+                Log.e(TAG, "RetrofitError details: " + retrofitError.getUrl() + ", repsonse = " + retrofitError.getResponse());
+            }
+        });
+        if(!Root.getInstance().gcmRegId.isEmpty()) {
+            service.sendPushToken(Root.getInstance().gcmRegId, new retrofit.Callback<User>() {
+                @Override
+                public void success(User user, Response response) {
+                    Log.i(TAG, "Sent GoogleCloudMessaging regid to server (existing registration).");
+                }
+                @Override
+                public void failure(RetrofitError retrofitError) {
+                    Log.e(TAG, "RetrofitError: " + retrofitError.getKind());
+                    Log.e(TAG, "RetrofitError details: " + retrofitError.getUrl() + ", repsonse = " + retrofitError.getResponse());
+                }
+            });
+        }
+        service.getCurrentGroup(new retrofit.Callback<Group>() {
+            @Override
+            public void success(Group group, Response response) {
+                EventBus.getDefault().post(new ReceivedCurrentGroup(group));
+            }
             @Override
             public void failure(RetrofitError retrofitError) {
                 Log.e(TAG, "RetrofitError: " + retrofitError.getKind());
@@ -140,6 +178,12 @@ public class LobbyActivity extends Activity {
 
         ImageButton but = (ImageButton)findViewById(R.id.createGroupButton);
         but.bringToFront();
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -170,13 +214,35 @@ public class LobbyActivity extends Activity {
         intent = new Intent(this, CreateGroupActivity.class);
         startActivity(intent);
     }
+    public void onEventMainThread(GroupListChanged event) {
+        groupList = event.list;
+        Root.getInstance().groupList = event.list;
+        for(Group g : groupList)
+            Log.i(TAG, "Grouplist entry: "+g.name);
+        if(currentGroupDummy != null) groupList.add(currentGroupDummy);
+        makeTable();
+    }
+    public void onEventMainThread(ReceivedCurrentGroup event) {
+        Log.i(TAG, "Received currentgroup: "+event.g.name);
+        currentGroupDummy = event.g;
+        if(groupList != null) {
+            groupList.add(event.g);
+            makeTable();
+            Log.i(TAG,"Table should be refreshed.");
+        }
+    }
+
+    public void onEventMainThread(EveningJoined event) {
+        Root.getInstance().currentGroup = event.g;
+        Intent intent = new Intent(this, EveningActivity.class);
+        startActivity(intent);
+    }
 
     public void makeTable()
     {
         final ListView lv = (ListView)findViewById(R.id.list_view_groups);
         GroupListAdapter adapter = new GroupListAdapter(this, groupList);
         lv.setAdapter(adapter);
-        final Intent intent = new Intent(this, EveningActivity.class);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -199,9 +265,8 @@ public class LobbyActivity extends Activity {
                 for(Participation part : group.participations)
                     if(part.user.id == Root.getInstance().getUser().id){
                         //already joined
-                        Root.getInstance().currentGroup = group;
+                        EventBus.getDefault().post(new EveningJoined(group));
                         alreadyInGroup = true;
-                        startActivity(intent);
                     }
 
                 if(!alreadyInGroup) {
@@ -210,8 +275,7 @@ public class LobbyActivity extends Activity {
                         @Override
                         public void success(Group group, Response response) {
                             Log.i(TAG, "Group joined. Server gave group.");
-                            Root.getInstance().currentGroup = group;
-                            startActivity(intent);
+                            EventBus.getDefault().post(new EveningJoined(group));
                         }
 
                         @Override

@@ -26,4 +26,5 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:1.7.1'
     compile project(':facebook') // The name of the module.
     compile "com.google.android.gms:play-services:6.1.+"
+    compile 'de.greenrobot:eventbus:2.2.+'
 }
