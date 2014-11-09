@@ -12,6 +12,8 @@ import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import de.greenrobot.event.EventBus;
+
 /**
  * This {@code IntentService} does the actual handling of the GCM message.
  * {@code GcmBroadcastReceiver} (a {@code WakefulBroadcastReceiver}) holds a
@@ -51,7 +53,7 @@ public class GcmIntentService extends IntentService {
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                 // Post notification of received message.
                 String message = extras.getString("message");
-                //TODO: use EventBus
+                EventBus.getDefault().post(new PushMessage(message));
                 sendNotification(message);
                 Log.i(TAG, "Received: " + message);
             }
@@ -74,8 +76,7 @@ public class GcmIntentService extends IntentService {
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.com_facebook_button_like_icon)
                         .setContentTitle("Its on.... YOU")
-                        .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(msg))
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
                         .setContentText(msg);
 
         mBuilder.setContentIntent(contentIntent);

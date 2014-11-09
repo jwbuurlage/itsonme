@@ -21,6 +21,11 @@ import retrofit.client.Response;
 
 class LeftGroup{
 }
+class GroupUpdate
+{
+    Group g;
+    GroupUpdate(Group _g){ g = _g; }
+}
 
 public class EveningActivity extends Activity {
     private static final String TAG = "ITSONME_EveningActivity";
@@ -127,6 +132,30 @@ public class EveningActivity extends Activity {
         Intent intent = new Intent(this, LobbyActivity.class);
         startActivity(intent);
         this.finish();
+    }
+
+    public void onEventMainThread(PushMessage event) {
+        //request update from server
+        //update UI on response
+        ServerInterface service = Root.getInstance().getService();
+        service.getCurrentGroup(new retrofit.Callback<Group>() {
+            @Override
+            public void success(Group group, Response response) {
+                EventBus.getDefault().post(new GroupUpdate(group));
+            }
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.e(TAG, "RetrofitError. TYPE:" + retrofitError.getKind() + " URL: " + retrofitError.getUrl());
+            }
+        });
+    }
+
+    public void onEventMainThread(GroupUpdate event) {
+        //update UI
+
+        //TODO
+        //TODO
+        //TODO
     }
 
     public void leaveGroup() {
