@@ -122,16 +122,16 @@
 
 
     <ToggleButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="152dp"
+        android:layout_height="70dp"
         android:text="New ToggleButton"
         android:id="@+id/toggleButton"
         android:layout_marginBottom="10dp"
-        android:background="#cccccc"
-        android:textOn="Alcoholic"
-        android:textOff="Non-alcoholic"
+        android:background="@drawable/sw"
+        android:textOn=""
+        android:textOff=""
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="10dp" />
+        android:layout_marginLeft="0dp" />
 
 </RelativeLayout>
