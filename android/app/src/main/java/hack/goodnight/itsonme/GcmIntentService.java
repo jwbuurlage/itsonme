@@ -85,7 +85,7 @@ public class GcmIntentService extends IntentService {
 
         mBuilder.setContentIntent(contentIntent);
         Notification notif = mBuilder.build();
-        notif.sound = Uri.parse("android.resource://hack.goodnight.itsonme/raw/sound.ogg");
+        notif.sound = Uri.parse("android.resource://hack.goodnight.itsonme/raw/thesound.ogg");
         notif.defaults = Notification.DEFAULT_VIBRATE;
         mNotificationManager.notify(NOTIFICATION_ID, notif);
 
